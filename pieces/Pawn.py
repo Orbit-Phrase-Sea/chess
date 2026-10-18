@@ -6,7 +6,6 @@ class Pawn(Piece):
 
     def __init__(self, color: str, initial_position: tuple, img_filename: str='') -> None:
         super().__init__(color, initial_position, img_filename)
-        self.has_moved = False
         self.has_moved_only_once = False
 
 
@@ -32,7 +31,7 @@ class Pawn(Piece):
                 ]
         if possible_moves[0] not in ally_piece_pos + opponent_piece_pos:
             legal_moves.append(possible_moves[0])
-            if not self.has_moved and possible_moves[1] not in ally_piece_pos + opponent_piece_pos:
+            if not self.has_moved() and possible_moves[1] not in ally_piece_pos + opponent_piece_pos:
                 legal_moves.append(possible_moves[1])
 
         # Check capture moves (not en-passant)
@@ -54,8 +53,7 @@ class Pawn(Piece):
         if super().move(player_1, player_2, position):
             return 1
 
-        if not self.has_moved:
-            self.has_moved = True
+        if not self.has_moved():
             self.has_moved_only_once = True
 
         self.has_moved_only_once = False

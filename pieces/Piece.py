@@ -15,6 +15,7 @@ class Piece:
 
         self.img_filename = img_filename
         self.selected = False
+        self._has_moved = False
 
 
     def move(self, player_1: object, player_2: object, position: tuple) -> int:
@@ -23,6 +24,7 @@ class Piece:
             return 1
 
         self.set_position(position)
+        self._has_moved = True
         return 0
 
 
@@ -81,6 +83,10 @@ class Piece:
 
     def is_selected(self) -> bool:
         return self.selected
+
+
+    def has_moved(self) -> bool:
+        return self._has_moved
 
 
     def set_img(self, img_object: object) -> None:
