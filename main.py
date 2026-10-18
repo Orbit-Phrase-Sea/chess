@@ -95,10 +95,11 @@ while running:
             position = (position[0]*Window.WIDTH/8, position[1]*Window.HEIGHT/8)
             screen.blit(piece.get_img(), position)
 
-            # Draw legal moves of selected piece
-            if piece.is_selected():
-                for move in piece.find_legal_moves(players['w'], players['b'], color_to_move):
-                    pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Window.WIDTH/8, (.5+move[1])*Window.HEIGHT/8), 10)
+    # Draw legal moves of selected piece
+    selected_piece = players[color_to_move].get_selected_piece()
+    if selected_piece is not None:
+        for move in selected_piece.find_legal_moves(players['b'], players['w'], color_to_move):
+            pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Window.WIDTH/8, (.5+move[1])*Window.HEIGHT/8), 10)
 
     pygame.display.flip()
 
