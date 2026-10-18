@@ -57,6 +57,5 @@ class Pawn(Piece):
             self.has_moved_only_once = True
 
         self.has_moved_only_once = False
-        self.en_passant_capturable = None
         return 0
 
