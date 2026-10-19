@@ -16,6 +16,7 @@ pygame.display.set_caption('Chess')
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((Window.WIDTH, Window.HEIGHT))
 board = pygame.image.load('assets/boards/maple.jpg')
+check_indicator = pygame.image.load('assets/check_indicators/red_blur.png')
 
 players = {
         'w' : Player('w'),
@@ -39,19 +40,24 @@ while running:
 
     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
 
+    king = players[color_to_move].get_piece_objects()[0]
+    in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
+
+    if in_check:
+        pos = king.get_position()
+        pos = pos[0]*100, pos[1]*100
+        screen.blit(check_indicator, pos)
+
     for idx, piece in enumerate(players[color_to_move].get_piece_objects()):
         if piece.find_legal_moves(players['w'], players['b'], color_to_move):
             break
 
     # No break
     else:
-        king = players[color_to_move].get_piece_objects()[0]
-        if king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move):
+        if in_check:
             print(f'Checkmate, {opponent_color} wins!')
-            running = False
         else:
             print('Stalemate. Draw.')
-            running = False
 
     # Event handler
     for event in pygame.event.get():
