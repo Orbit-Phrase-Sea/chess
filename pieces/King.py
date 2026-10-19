@@ -26,11 +26,11 @@ class King(Piece):
             if pos in legal_moves:
                 legal_moves.pop(legal_moves.index(pos))
 
-#        if color_to_move == self.color:
-#            if self.castles_legality_check(ally=ally, opponent=opponent, side='k'):
-#                legal_moves.append((self.position[0]+2, self.position[1]))
-#            if self.castles_legality_check(ally=ally, opponent=opponent, side='q'):
-#                legal_moves.append((self.position[0]-2, self.position[1]))
+        if color_to_move == self.color:
+            if self.castles_legality_check(ally=ally, opponent=opponent, side='k'):
+                legal_moves.append((self.position[0]+2, self.position[1]))
+            if self.castles_legality_check(ally=ally, opponent=opponent, side='q'):
+                legal_moves.append((self.position[0]-2, self.position[1]))
 
         return self._filter_for_checks(ally=ally, opponent=opponent, color_to_move=color_to_move, moves=legal_moves)
 
