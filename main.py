@@ -45,7 +45,7 @@ while running:
 
     if in_check:
         pos = king.get_position()
-        pos = pos[0]*100, pos[1]*100
+        pos = pos[0]*Window.WIDTH/8, pos[1]*Window.HEIGHT/8
         screen.blit(check_indicator, pos)
 
     for idx, piece in enumerate(players[color_to_move].get_piece_objects()):
