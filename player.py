@@ -76,12 +76,13 @@ class Player:
 
         # Castles
         k_rook, q_rook = None, None
-        for piece in self.active_piece_list:
-            if type(piece).__name__ == 'Rook' and not piece.has_moved():
-                if piece.get_position()[0] == 0:
-                    q_rook = piece
-                elif piece.get_position()[0] == 7:
-                    k_rook = piece
+        if type(self.selected_piece).__name__ == 'King' and abs(position[0] - int(move_log[0])) == 2:
+            for piece in self.active_piece_list:
+                if type(piece).__name__ == 'Rook' and not piece.has_moved():
+                    if piece.get_position()[0] == 0:
+                        q_rook = piece
+                    elif piece.get_position()[0] == 7:
+                        k_rook = piece
         if type(self.selected_piece).__name__ == 'King' and position[0] - int(move_log[0]) == 2:
             k_rook.set_position((5, k_rook.get_position()[1]))
         if type(self.selected_piece).__name__ == 'King' and int(move_log[0]) - position[0] == 2:
