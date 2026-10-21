@@ -39,6 +39,7 @@ while running:
     screen.blit(board, (0, 0))
 
     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
+    pygame.display.set_caption(f'Chess color: {color_to_move} move: {move_count//2+1}')
 
     king = players[color_to_move].get_piece_objects()[0]
     in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
