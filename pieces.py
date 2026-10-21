@@ -1,3 +1,6 @@
+from player import Player
+
+
 class Piece:
 
 
@@ -18,7 +21,7 @@ class Piece:
         self._has_moved = False
 
 
-    def move(self, player_1: object, player_2: object, position: tuple) -> int:
+    def move(self, player_1: Player, player_2: Player, position: tuple) -> int:
 
         if not self.is_selected() or position not in self.find_legal_moves(player_1, player_2, self.color):
             return 1
@@ -28,7 +31,7 @@ class Piece:
         return 0
 
 
-    def find_legal_moves(self, player_1: object, player_2: object, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: Player, player_2: Player, color_to_move: str) -> list:
 
         if color_to_move != 'b' and color_to_move != 'w':
             raise ValueError('color_to_move must be "w" or "b"')
@@ -36,7 +39,7 @@ class Piece:
         return []
 
 
-    def check_for_checks(self, *, ally: object, opponent: object, position: tuple, color_to_move: str) -> bool:
+    def check_for_checks(self, *, ally: Player, opponent: Player, position: tuple, color_to_move: str) -> bool:
 
         if self.color != color_to_move:
             return False
@@ -67,7 +70,7 @@ class Piece:
         return False
 
 
-    def _filter_for_checks(self, *, ally: object, opponent: object, color_to_move: str, moves: list) -> list:
+    def _filter_for_checks(self, *, ally: Player, opponent: Player, color_to_move: str, moves: list) -> list:
         for pos in moves[::-1]:
             if self.check_for_checks(ally=ally, opponent=opponent, position=pos, color_to_move=color_to_move):
                 moves.pop(moves.index(pos))
@@ -75,7 +78,7 @@ class Piece:
         return moves
 
 
-    def ally_opponent(self, player_1: object, player_2: object) -> tuple:
+    def ally_opponent(self, player_1: Player, player_2: Player) -> tuple:
         if player_1.color == self.color:
             return player_1, player_2
         return player_2, player_1
@@ -187,7 +190,7 @@ class King(Piece):
 class Bishop(Piece):
 
 
-    def find_legal_moves(self, player_1: object, player_2: object, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: Player, player_2: Player, color_to_move: str) -> list:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -222,7 +225,7 @@ class Bishop(Piece):
 class Rook(Piece):
 
 
-    def find_legal_moves(self, player_1: object, player_2: object, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: Player, player_2: Player, color_to_move: str) -> list:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -297,7 +300,7 @@ class Rook(Piece):
 class Knite(Piece):
 
 
-    def find_legal_moves(self, player_1: object, player_2: object, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: Player, player_2: Player, color_to_move: str) -> list:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
         ally_piece_pos = [piece.get_position() for piece in ally.get_piece_objects()]
