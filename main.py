@@ -31,34 +31,17 @@ for player in players.values():
 
 
 # Game loop
+game_over = False
+display_change = True
 wait_for_promotion = False
 move_count = 0
 running = True
 while running:
     clock.tick(FPS)
-    screen.blit(board, (0, 0))
 
     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
     pygame.display.set_caption(f'Chess color: {color_to_move} move: {move_count//2+1}')
 
-    king = players[color_to_move].get_piece_objects()[0]
-    in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
-
-    if in_check:
-        pos = king.get_position()
-        pos = pos[0]*Window.WIDTH/8, pos[1]*Window.HEIGHT/8
-        screen.blit(check_indicator, pos)
-
-    for idx, piece in enumerate(players[color_to_move].get_piece_objects()):
-        if piece.find_legal_moves(players['w'], players['b'], color_to_move):
-            break
-
-    # No break
-    else:
-        if in_check:
-            print(f'Checkmate, {opponent_color} wins!')
-        else:
-            print('Stalemate. Draw.')
 
     # Event handler
     for event in pygame.event.get():
@@ -74,6 +57,7 @@ while running:
             promotion_options = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]
             if event.key not in promotion_options:
                 continue
+            display_change = True
             new_piece = players[color_to_move].promote(promotion_options.index(event.key)+1)
             new_piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', new_piece.get_img_filename())))
             wait_for_promotion = False
@@ -82,6 +66,7 @@ while running:
 
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            display_change = True
             mouse_x, mouse_y = pygame.mouse.get_pos()
             square_position = int(mouse_x//(Window.WIDTH/8)), int(mouse_y//(Window.HEIGHT/8))
             players[color_to_move].set_en_passant_capturable(players[opponent_color].get_en_passant_capturable())
@@ -94,8 +79,40 @@ while running:
                         continue
                     move_count += 1
 
+    if game_over:
+        continue
 
-    # Draw pieces
+    # Check for check
+    king = players[color_to_move].get_piece_objects()[0]
+    in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
+    if in_check:
+        display_change = True
+
+    for idx, piece in enumerate(players[color_to_move].get_piece_objects()):
+        if piece.find_legal_moves(players['w'], players['b'], color_to_move):
+            break
+
+    # No break
+    # Game over, print result
+    else:
+        game_over = True
+        if in_check:
+            print(f'Checkmate, {opponent_color} wins!')
+        else:
+            print('Stalemate. Draw.')
+
+    # No events
+    if not display_change:
+        continue
+
+    # Draw
+    screen.blit(board, (0, 0))
+
+    if in_check:
+        pos = king.get_position()
+        pos = pos[0]*Window.WIDTH/8, pos[1]*Window.HEIGHT/8
+        screen.blit(check_indicator, pos)
+
     for player in players.values():
         for piece in player.get_piece_objects():
             position = piece.get_position()
@@ -108,6 +125,7 @@ while running:
         for move in selected_piece.find_legal_moves(players['b'], players['w'], color_to_move):
             pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Window.WIDTH/8, (.5+move[1])*Window.HEIGHT/8), 10)
 
+    display_change = False
     pygame.display.flip()
 
 
