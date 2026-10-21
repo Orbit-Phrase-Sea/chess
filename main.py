@@ -31,6 +31,7 @@ for player in players.values():
 
 
 # Game loop
+outcome = ''
 game_over = False
 display_change = True
 wait_for_promotion = False
@@ -40,7 +41,7 @@ while running:
     clock.tick(FPS)
 
     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
-    pygame.display.set_caption(f'Chess color: {color_to_move} move: {move_count//2+1}')
+    pygame.display.set_caption(f'Chess | {"white" if color_to_move=="w" else "black"} to play | move: {move_count//2+1} | {outcome}')
 
 
     # Event handler
@@ -97,9 +98,10 @@ while running:
     else:
         game_over = True
         if in_check:
-            print(f'Checkmate, {opponent_color} wins!')
+            outcome = f"Checkmate, {'white' if opponent_color=='w' else 'black'} wins!"
         else:
-            print('Stalemate. Draw.')
+            outcome = 'Stalemate, Draw'
+        print(outcome)
 
     # No events
     if not display_change:
