@@ -9,16 +9,16 @@ class Player:
         self.en_passant_capturable = None
         self.move_history = []
         y_pos = 0 if color == 'b' else 7
-        self.active_piece_list = [King.King(color, initial_position=(4, y_pos), img_filename=color+'K.svg'),
-                                  Bishop.Bishop(self.color, initial_position=(2, y_pos), img_filename=color+'B.svg'),
-                                  Bishop.Bishop(self.color, initial_position=(5, y_pos), img_filename=color+'B.svg'),
-                                  Knite.Knite(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
-                                  Knite.Knite(self.color, initial_position=(6, y_pos), img_filename=color+'N.svg'),
-                                  Rook.Rook(color, initial_position=(0, y_pos), img_filename=color+'R.svg'),
-                                  Rook.Rook(color, initial_position=(7, y_pos), img_filename=color+'R.svg'),
-                                  Queen.Queen(color, initial_position=(3, y_pos), img_filename=color+'Q.svg'),
+        self.active_piece_list = [King(color, initial_position=(4, y_pos), img_filename=color+'K.svg'),
+                                  Bishop(self.color, initial_position=(2, y_pos), img_filename=color+'B.svg'),
+                                  Bishop(self.color, initial_position=(5, y_pos), img_filename=color+'B.svg'),
+                                  Knite(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
+                                  Knite(self.color, initial_position=(6, y_pos), img_filename=color+'N.svg'),
+                                  Rook(color, initial_position=(0, y_pos), img_filename=color+'R.svg'),
+                                  Rook(color, initial_position=(7, y_pos), img_filename=color+'R.svg'),
+                                  Queen(color, initial_position=(3, y_pos), img_filename=color+'Q.svg'),
                                   ]
-        self.active_piece_list += [Pawn.Pawn(self.color, initial_position=(i, 6 if y_pos==7 else 1), img_filename=color+'P.svg') for i in range(8)]
+        self.active_piece_list += [Pawn(self.color, initial_position=(i, 6 if y_pos==7 else 1), img_filename=color+'P.svg') for i in range(8)]
 
 
     def check_for_piece_selection(self, position: tuple) -> bool:
@@ -120,7 +120,7 @@ class Player:
         pos = self.active_piece_list[piece_idx].get_position()
         self.active_piece_list.pop(piece_idx)
 
-        options = [Queen.Queen, Rook.Rook, Knite.Knite, Bishop.Bishop]
+        options = [Queen, Rook, Knite, Bishop]
         piece_symbol = 'QRNB'
 
         self.active_piece_list.insert(piece_idx, options[code-1](self.color, pos, img_filename=self.color+piece_symbol[code-1]+'.svg'))
