@@ -42,7 +42,7 @@ class Player:
         return False
 
 
-    def move_selected_piece(self, opponent: object, position: tuple) -> bool:
+    def move_selected_piece(self, opponent: Player, position: tuple) -> bool:
         if opponent.color == self.color:
             raise ValueError("opponent.color cannot be the same as self.color")
 
