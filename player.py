@@ -22,6 +22,8 @@ class Player:
 
 
     def check_for_piece_selection(self, position: tuple) -> bool:
+        """Returns True if a piece was selected and False otherwise"""
+
         for piece in self.get_piece_objects():
             if piece.get_position()[0] == position[0] and piece.get_position()[1] == position[1]:
                 if piece is self.selected_piece:
