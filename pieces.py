@@ -4,26 +4,27 @@ import pygame
 import player
 
 
+type Position = tuple[int, int]
+
+
 class Piece:
 
 
-    def __init__(self, color: str, initial_position: tuple, img_filename: str='') -> None:
+    def __init__(self, color: str, initial_position: Position, img_filename: str='') -> None:
         if color not in ['w', 'b']:
             raise ValueError('color must be "w" or "b"')
         self.color = color
 
-        if len(initial_position) != 2:
-            raise ValueError('initial_position must be a tuple of length 2')
-        elif 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
+        if 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
             raise ValueError('The elements of initial_position must be in [0, 7] exclusively')
 
-        self.position: tuple = initial_position
+        self.position: Position = initial_position
         self.img_filename: str = img_filename
         self.selected: bool = False
         self._has_moved: bool = False
 
 
-    def move(self, player_1: player.Player, player_2: player.Player, position: tuple) -> int:
+    def move(self, player_1: player.Player, player_2: player.Player, position: Position) -> int:
 
         if not self.is_selected() or position not in self.find_legal_moves(player_1, player_2, self.color):
             return 1
@@ -41,7 +42,7 @@ class Piece:
         return []
 
 
-    def check_for_checks(self, *, ally: player.Player, opponent: player.Player, position: tuple, color_to_move: str) -> bool:
+    def check_for_checks(self, *, ally: player.Player, opponent: player.Player, position: Position, color_to_move: str) -> bool:
 
         if self.color != color_to_move:
             return False
@@ -82,7 +83,7 @@ class Piece:
         return filtered_moves
 
 
-    def ally_opponent(self, player_1: player.Player, player_2: player.Player) -> tuple:
+    def ally_opponent(self, player_1: player.Player, player_2: player.Player) -> tuple[player.Player, player.Player]:
         if player_1.get_color() == self.color:
             return player_1, player_2
         return player_2, player_1
@@ -108,11 +109,11 @@ class Piece:
         return self.img
 
 
-    def set_position(self, position: tuple) -> None:
+    def set_position(self, position: Position) -> None:
         self.position = position
 
 
-    def get_position(self) -> tuple:
+    def get_position(self) -> Position:
         return self.position
 
 

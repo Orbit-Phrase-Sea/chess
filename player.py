@@ -1,4 +1,4 @@
-from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece
+from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece, Position
 
 
 class Player:
@@ -21,7 +21,7 @@ class Player:
         self.active_piece_list += [Pawn(self.color, initial_position=(i, 6 if y_pos==7 else 1), img_filename=color+'P.svg') for i in range(8)]
 
 
-    def check_for_piece_selection(self, position: tuple) -> bool:
+    def check_for_piece_selection(self, position: Position) -> bool:
         """Returns True if a piece was selected and False otherwise"""
 
         for piece in self.get_piece_objects():
@@ -44,7 +44,7 @@ class Player:
         return False
 
 
-    def move_selected_piece(self, opponent: Player, position: tuple) -> bool:
+    def move_selected_piece(self, opponent: Player, position: Position) -> bool:
         if opponent.get_color() == self.color:
             raise ValueError("opponent.color cannot be the same as self.color")
 
