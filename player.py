@@ -1,4 +1,4 @@
-from pieces import King, Queen, Rook, Bishop, Knite, Pawn
+from pieces import King, Queen, Rook, Bishop, Knite, Pawn, Piece
 
 
 class Player:
@@ -109,7 +109,7 @@ class Player:
         return False
 
 
-    def promote(self, code: int) -> object:
+    def promote(self, code: int) -> Piece:
         for idx, piece in enumerate(self.active_piece_list):
             if type(piece).__name__ != 'Pawn':
                 continue

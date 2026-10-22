@@ -1,3 +1,6 @@
+import pygame
+
+
 import player
 
 
@@ -92,7 +95,7 @@ class Piece:
         return self._has_moved
 
 
-    def set_img(self, img_object: object) -> None:
+    def set_img(self, img_object: pygame.surface.Surface) -> None:
         self.img = img_object
 
 
@@ -100,7 +103,7 @@ class Piece:
         return self.img_filename
 
 
-    def get_img(self) -> object:
+    def get_img(self) -> pygame.surface.Surface:
         return self.img
 
 
