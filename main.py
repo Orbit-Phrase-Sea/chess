@@ -76,7 +76,7 @@ while running:
                 if players[color_to_move].move_selected_piece(players[opponent_color], square_position):
                     if players[color_to_move].is_to_promote():
                         wait_for_promotion = True
-                        print('To promote press: 1 (Queen), 2 (Rook), 3 (Knite), 4 (Bishop)')
+                        print('To promote press: 1 (Queen), 2 (Rook), 3 (Knight), 4 (Bishop)')
                         continue
                     move_count += 1
                     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')

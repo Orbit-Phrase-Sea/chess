@@ -1,4 +1,4 @@
-from pieces import King, Queen, Rook, Bishop, Knite, Pawn, Piece
+from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece
 
 
 class Player:
@@ -12,8 +12,8 @@ class Player:
         self.active_piece_list = [King(color, initial_position=(4, y_pos), img_filename=color+'K.svg'),
                                   Bishop(self.color, initial_position=(2, y_pos), img_filename=color+'B.svg'),
                                   Bishop(self.color, initial_position=(5, y_pos), img_filename=color+'B.svg'),
-                                  Knite(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
-                                  Knite(self.color, initial_position=(6, y_pos), img_filename=color+'N.svg'),
+                                  Knight(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
+                                  Knight(self.color, initial_position=(6, y_pos), img_filename=color+'N.svg'),
                                   Rook(color, initial_position=(0, y_pos), img_filename=color+'R.svg'),
                                   Rook(color, initial_position=(7, y_pos), img_filename=color+'R.svg'),
                                   Queen(color, initial_position=(3, y_pos), img_filename=color+'Q.svg'),
@@ -62,14 +62,14 @@ class Player:
 
         self.en_passant_capturable = None
 
-        diraction = 1 if self.color == 'b' else -1
+        direction = 1 if self.color == 'b' else -1
         for piece_idx, piece in  enumerate(opponent.get_piece_objects()):
             if (piece.get_position() == self.selected_piece.get_position()):
                 move_log += 'x'
                 opponent.get_piece_objects().pop(piece_idx)
 
             # Captured en-passant
-            elif type(self.selected_piece).__name__ == 'Pawn' == type(piece).__name__ == 'Pawn' and piece.get_position() == (position[0], position[1]-diraction):
+            elif type(self.selected_piece).__name__ == 'Pawn' == type(piece).__name__ == 'Pawn' and piece.get_position() == (position[0], position[1]-direction):
                 move_log += 'x'
                 opponent.get_piece_objects().pop(piece_idx)
 
@@ -123,7 +123,7 @@ class Player:
         pos = self.active_piece_list[piece_idx].get_position()
         self.active_piece_list.pop(piece_idx)
 
-        options = [Queen, Rook, Knite, Bishop]
+        options = [Queen, Rook, Knight, Bishop]
         piece_symbol = 'QRNB'
 
         self.active_piece_list.insert(piece_idx, options[code-1](self.color, pos, img_filename=self.color+piece_symbol[code-1]+'.svg'))

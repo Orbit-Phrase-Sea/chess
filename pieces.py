@@ -300,7 +300,7 @@ class Rook(Piece):
         return self._filter_for_checks(ally=ally, opponent=opponent, color_to_move=color_to_move, moves=legal_moves)
 
 
-class Knite(Piece):
+class Knight(Piece):
 
 
     def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
