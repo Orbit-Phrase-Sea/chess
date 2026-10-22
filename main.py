@@ -32,12 +32,12 @@ for player in players.values():
 
 
 # Game loop
-outcome = ''
-game_over = False
-display_change = True
-wait_for_promotion = False
-move_count = 0
-running = True
+outcome: str = ''
+game_over: bool = False
+display_change: bool = True
+wait_for_promotion: bool = False
+move_count: int = 0
+running: bool = True
 while running:
     clock.tick(FPS)
 
