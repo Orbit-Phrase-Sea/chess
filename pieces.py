@@ -121,6 +121,10 @@ class Piece:
         self.selected = selected
 
 
+    def get_color(self) -> str:
+        return self.color
+
+
 class King(Piece):
 
 
