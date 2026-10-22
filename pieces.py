@@ -74,11 +74,13 @@ class Piece:
 
 
     def _filter_for_checks(self, *, ally: player.Player, opponent: player.Player, color_to_move: str, moves: list) -> list:
-        for pos in moves[::-1]:
-            if self.check_for_checks(ally=ally, opponent=opponent, position=pos, color_to_move=color_to_move):
-                moves.pop(moves.index(pos))
+        filtered_moves = []
+        for move in moves:
+            if self.check_for_checks(ally=ally, opponent=opponent, position=move, color_to_move=color_to_move):
+                continue
+            filtered_moves.append(move)
 
-        return moves
+        return filtered_moves
 
 
     def ally_opponent(self, player_1: player.Player, player_2: player.Player) -> tuple:
