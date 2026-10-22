@@ -30,6 +30,8 @@ for player in players.values():
 
 
 # Game loop
+color_to_move: str = 'w'
+opponent_color: str = 'b'
 outcome: str = ''
 game_over: bool = False
 display_change: bool = True
@@ -39,8 +41,6 @@ running: bool = True
 while running:
     clock.tick(Display.FPS)
 
-    color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
-    pygame.display.set_caption(f'Chess | {"white" if color_to_move=="w" else "black"} to play | move: {move_count//2+1} | {outcome}')
 
 
     # Event handler
@@ -62,6 +62,7 @@ while running:
             new_piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', new_piece.get_img_filename())))
             wait_for_promotion = False
             move_count += 1
+            color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
             break
 
 
@@ -78,6 +79,7 @@ while running:
                         print('To promote press: 1 (Queen), 2 (Rook), 3 (Knite), 4 (Bishop)')
                         continue
                     move_count += 1
+                    color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
 
     if game_over:
         continue
@@ -107,6 +109,7 @@ while running:
         continue
 
     # Draw
+    pygame.display.set_caption(f'Chess | {"white" if color_to_move=="w" else "black"} to play | move: {move_count//2+1} | {outcome}')
     screen.blit(board, (0, 0))
 
     if in_check:
