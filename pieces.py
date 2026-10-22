@@ -16,9 +16,8 @@ class Piece:
             raise ValueError('initial_position must be a tuple of length 2')
         elif 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
             raise ValueError('The elements of initial_position must be in [0, 7] exclusively')
-        else:
-            self.position = initial_position
 
+        self.position = initial_position
         self.img_filename = img_filename
         self.selected = False
         self._has_moved = False
