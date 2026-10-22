@@ -4,17 +4,15 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
 
-from constants import Window
+from constants import Display
 from player import Player
 
-
-FPS = 30
 
 pygame.init()
 pygame.display.set_caption('Chess')
 
 clock = pygame.time.Clock()
-screen = pygame.display.set_mode((Window.WIDTH, Window.HEIGHT))
+screen = pygame.display.set_mode((Display.WIDTH, Display.HEIGHT))
 
 board = pygame.image.load(os.path.join('assets', 'boards', 'maple.jpg'))
 check_indicator = pygame.image.load(os.path.join('assets', 'check_indicators', 'red_blur.png'))
@@ -39,7 +37,7 @@ wait_for_promotion: bool = False
 move_count: int = 0
 running: bool = True
 while running:
-    clock.tick(FPS)
+    clock.tick(Display.FPS)
 
     color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
     pygame.display.set_caption(f'Chess | {"white" if color_to_move=="w" else "black"} to play | move: {move_count//2+1} | {outcome}')
@@ -70,7 +68,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
             display_change = True
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            square_position = int(mouse_x//(Window.WIDTH/8)), int(mouse_y//(Window.HEIGHT/8))
+            square_position = int(mouse_x//(Display.WIDTH/8)), int(mouse_y//(Display.HEIGHT/8))
             players[color_to_move].set_en_passant_capturable(players[opponent_color].get_en_passant_capturable())
 
             if not players[color_to_move].check_for_piece_selection(square_position):
@@ -113,20 +111,20 @@ while running:
 
     if in_check:
         pos = king.get_position()
-        pos = pos[0]*Window.WIDTH/8, pos[1]*Window.HEIGHT/8
+        pos = pos[0]*Display.WIDTH/8, pos[1]*Display.HEIGHT/8
         screen.blit(check_indicator, pos)
 
     for player in players.values():
         for piece in player.get_piece_objects():
             position = piece.get_position()
-            position = (position[0]*Window.WIDTH/8, position[1]*Window.HEIGHT/8)
+            position = (position[0]*Display.WIDTH/8, position[1]*Display.HEIGHT/8)
             screen.blit(piece.get_img(), position)
 
     # Draw legal moves of selected piece
     selected_piece = players[color_to_move].get_selected_piece()
     if selected_piece is not None:
         for move in selected_piece.find_legal_moves(players['b'], players['w'], color_to_move):
-            pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Window.WIDTH/8, (.5+move[1])*Window.HEIGHT/8), 10)
+            pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Display.WIDTH/8, (.5+move[1])*Display.HEIGHT/8), 10)
 
     display_change = False
     pygame.display.flip()
