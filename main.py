@@ -15,8 +15,9 @@ pygame.display.set_caption('Chess')
 
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((Window.WIDTH, Window.HEIGHT))
-board = pygame.image.load('assets/boards/maple.jpg')
-check_indicator = pygame.image.load('assets/check_indicators/red_blur.png')
+
+board = pygame.image.load(os.path.join('assets', 'boards', 'maple.jpg'))
+check_indicator = pygame.image.load(os.path.join('assets', 'check_indicators', 'red_blur.png'))
 
 players = {
         'w' : Player('w'),
