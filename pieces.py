@@ -17,10 +17,10 @@ class Piece:
         elif 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
             raise ValueError('The elements of initial_position must be in [0, 7] exclusively')
 
-        self.position = initial_position
-        self.img_filename = img_filename
-        self.selected = False
-        self._has_moved = False
+        self.position: tuple = initial_position
+        self.img_filename: str = img_filename
+        self.selected: bool = False
+        self._has_moved: bool = False
 
 
     def move(self, player_1: player.Player, player_2: player.Player, position: tuple) -> int:
@@ -127,7 +127,7 @@ class Piece:
 class King(Piece):
 
 
-    def find_legal_moves(self, player_1, player_2, color_to_move):
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -158,7 +158,7 @@ class King(Piece):
         return self._filter_for_checks(ally=ally, opponent=opponent, color_to_move=color_to_move, moves=legal_moves)
 
 
-    def castles_legality_check(self, *, ally, opponent, side: str):
+    def castles_legality_check(self, *, ally: player.Player, opponent: player.Player, side: str) -> bool:
         if side not in ['k', 'q']:
             raise ValueError("side must be 'k' or 'q'")
 
@@ -326,7 +326,7 @@ class Knight(Piece):
 class Pawn(Piece):
 
 
-    def find_legal_moves(self, player_1, player_2, color_to_move):
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
