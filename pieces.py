@@ -84,7 +84,7 @@ class Piece:
 
 
     def ally_opponent(self, player_1: player.Player, player_2: player.Player) -> tuple:
-        if player_1.color == self.color:
+        if player_1.get_color() == self.color:
             return player_1, player_2
         return player_2, player_1
 
@@ -176,7 +176,7 @@ class King(Piece):
         for piece in ally.get_piece_objects()+opponent.get_piece_objects():
             if piece.get_position() in empty_positions:
                 return False
-            if piece.color == self.color and type(piece).__name__ == 'Rook' and piece.get_position() == (rook_x, rank):
+            if piece.get_color() == self.color and type(piece).__name__ == 'Rook' and piece.get_position() == (rook_x, rank):
                 if not piece.has_moved():
                     rook_check_passed = True
 
