@@ -185,7 +185,7 @@ class King(Piece):
 
         for piece in opponent.get_piece_objects():
             attacked_squares = piece.find_legal_moves(ally, opponent, self.color)
-            for position in king_path:
+            for position in king_path + [(4, rank)]:
                 if position in attacked_squares:
                     return False
 
