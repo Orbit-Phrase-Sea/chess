@@ -152,13 +152,13 @@ class Player:
         return self.selected_piece
 
 
-    def add_piece(self, new_piece: Piece) -> None:
+    def add_piece(self, new_piece: Piece, opponent: Player) -> None:
         if isinstance(new_piece, King):
             raise ValueError("Use the set_king method to set the king instead")
+        if new_piece.get_color() != self.color:
+            raise ValueError("The color of the piece added must be the same color as the player")
 
-        for piece in self.active_piece_list:
-            if piece is new_piece:
-                return
+        for piece in self.active_piece_list + opponent.get_piece_objects():
             if piece.get_position() == new_piece.get_position():
                 raise ValueError(f"There is already a piece in position={new_piece.get_position()}")
 
