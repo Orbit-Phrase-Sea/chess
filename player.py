@@ -152,6 +152,19 @@ class Player:
         return self.selected_piece
 
 
+    def add_piece(self, new_piece: Piece) -> None:
+        if isinstance(new_piece, King):
+            raise ValueError("Use the set_king method to set the king instead")
+
+        for piece in self.active_piece_list:
+            if piece is new_piece:
+                return
+            if piece.get_position() == new_piece.get_position():
+                raise ValueError(f"There is already a piece in position={new_piece.get_position()}")
+
+        self.active_piece_list.append(new_piece)
+
+
     def set_king(self, king: King) -> None:
         if self.king is None:
             self.active_piece_list.append(king)
