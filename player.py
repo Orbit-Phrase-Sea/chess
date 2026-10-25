@@ -13,22 +13,22 @@ class Player:
         self.king = None
         self.active_piece_list: list = []
         self.move_history: list = []
-        y_pos = 0 if color == 'b' else 7
+        rank = 0 if color == 'b' else 7
 
         if piece_setup == 'default' or piece_setup == 'king':
-            self.king = King(color, initial_position=(4, y_pos), img_filename=color+'K.svg')
+            self.king = King(color, initial_position=(4, rank), img_filename=color+'K.svg')
             self.active_piece_list.append(self.king)
         if piece_setup == 'default':
             self.active_piece_list += [
-                                        Bishop(self.color, initial_position=(2, y_pos), img_filename=color+'B.svg'),
-                                        Bishop(self.color, initial_position=(5, y_pos), img_filename=color+'B.svg'),
-                                        Knight(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
-                                        Knight(self.color, initial_position=(6, y_pos), img_filename=color+'N.svg'),
-                                        Rook(color, initial_position=(0, y_pos), img_filename=color+'R.svg'),
-                                        Rook(color, initial_position=(7, y_pos), img_filename=color+'R.svg'),
-                                        Queen(color, initial_position=(3, y_pos), img_filename=color+'Q.svg'),
+                                        Bishop(self.color, initial_position=(2, rank), img_filename=color+'B.svg'),
+                                        Bishop(self.color, initial_position=(5, rank), img_filename=color+'B.svg'),
+                                        Knight(self.color, initial_position=(1, rank), img_filename=color+'N.svg'),
+                                        Knight(self.color, initial_position=(6, rank), img_filename=color+'N.svg'),
+                                        Rook(color, initial_position=(0, rank), img_filename=color+'R.svg'),
+                                        Rook(color, initial_position=(7, rank), img_filename=color+'R.svg'),
+                                        Queen(color, initial_position=(3, rank), img_filename=color+'Q.svg'),
                                     ]
-            self.active_piece_list += [Pawn(self.color, initial_position=(i, 6 if y_pos==7 else 1), img_filename=color+'P.svg') for i in range(8)]
+            self.active_piece_list += [Pawn(self.color, initial_position=(i, 6 if rank==7 else 1), img_filename=color+'P.svg') for i in range(8)]
 
 
     def check_for_piece_selection(self, position: Position) -> bool:
