@@ -165,7 +165,11 @@ class Player:
         self.active_piece_list.append(new_piece)
 
 
-    def set_king(self, king: King) -> None:
+    def set_king(self, king: King, opponent: Player) -> None:
+        for piece in self.active_piece_list + opponent.get_piece_objects():
+            if king.get_position() == piece.get_position():
+                raise ValueError("There is already a piece in that position")
+
         if self.king is None:
             self.active_piece_list.append(king)
             self.king = king
