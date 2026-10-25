@@ -155,8 +155,14 @@ class Player:
     def set_king(self, king: King) -> None:
         if self.king is None:
             self.active_piece_list.append(king)
-        else:
-            self.active_piece_list[0] = king
+            self.king = king
+            return
+
+        for idx, piece in enumerate(self.active_piece_list):
+            if isinstance(piece, King):
+                self.active_piece_list[idx] = king
+                break
+
         self.king = king
 
 
