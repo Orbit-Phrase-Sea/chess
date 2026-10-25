@@ -24,8 +24,8 @@ def test_edge_king_moves(color_to_move):
             'w': Player('w', piece_setup='empty'),
             'b': Player('b', piece_setup='empty')
             }
-    players['w'].set_king(King('w', (0, 7)))
-    players['b'].set_king(King('b', (7, 7)))
+    players['w'].set_king(King('w', (0, 7)), players['b'])
+    players['b'].set_king(King('b', (7, 7)), players['w'])
     moves = [(0, 6), (1, 7), (1, 6)] if color_to_move == 'w' else [(6, 7), (7, 6), (6, 6)]
     assert Counter(players[color_to_move].get_king().find_legal_moves(players['w'], players['b'], color_to_move)) == Counter(moves)
 
@@ -35,8 +35,8 @@ def test_middle_king_moves(color_to_move):
             'w': Player('w', piece_setup='empty'),
             'b': Player('b', piece_setup='empty')
             }
-    players['w'].set_king(King('w', (1, 4)))
-    players['b'].set_king(King('b', (4, 2)))
+    players['w'].set_king(King('w', (1, 4)), players['b'])
+    players['b'].set_king(King('b', (4, 2)), players['w'])
     w_moves = [(0, 4), (0, 3), (0, 5), (1, 5), (1, 3), (2, 3), (2, 4), (2, 5)]
     b_moves = [(3, 1), (3, 2), (3, 3), (4, 3), (4, 1), (5, 1), (5, 2), (5, 3)]
     assert Counter(players[color_to_move].get_king().find_legal_moves(players['w'], players['b'], color_to_move)) == Counter(w_moves if color_to_move=='w' else b_moves)
