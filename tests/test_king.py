@@ -5,7 +5,7 @@ import pytest
 
 
 from player import Player
-from pieces import Piece, King, Queen, Bishop, Knight, Rook, Pawn, Position
+from pieces import King
 
 
 @pytest.mark.parametrize('color', ['w', 'b'])
