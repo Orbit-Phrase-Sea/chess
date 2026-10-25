@@ -28,6 +28,9 @@ for player in players.values():
     for filename, piece in zip(player.get_piece_img_filenames(), player.get_piece_objects()):
         piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', filename)))
 
+for player in players.values():
+    if not player.get_piece_objects() or type(player.get_piece_objects()[0]).__name__ != 'King':
+        raise RuntimeError(f"The first item of a player.active_piece_list must be a king.\nFaulty player color: {player.get_color()}")
 
 # Game loop
 color_to_move: str = 'w'
@@ -40,8 +43,6 @@ move_count: int = 0
 running: bool = True
 while running:
     clock.tick(Display.FPS)
-
-
 
     # Event handler
     for event in pygame.event.get():
