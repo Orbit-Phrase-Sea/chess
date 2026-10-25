@@ -55,7 +55,7 @@ class Piece:
             if self.position == piece.get_position():
                 captured_idx, captured_piece = idx, opponent.get_piece_objects().pop(idx)
 
-        king_position = ally.get_piece_objects()[0].get_position()
+        king_position = ally.get_king().get_position()
         for opponent_piece in opponent.get_piece_objects():
 
             if opponent_piece.get_position() == self.position:

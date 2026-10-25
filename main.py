@@ -28,8 +28,9 @@ for player in players.values():
     for filename, piece in zip(player.get_piece_img_filenames(), player.get_piece_objects()):
         piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', filename)))
 
+# Check for player without a king
 for player in players.values():
-    if not player.get_piece_objects() or type(player.get_piece_objects()[0]).__name__ != 'King':
+    if player.get_king() is None:
         raise RuntimeError(f"The first item of a player.active_piece_list must be a king.\nFaulty player color: {player.get_color()}")
 
 # Game loop
@@ -86,7 +87,7 @@ while running:
         continue
 
     # Check for check
-    king = players[color_to_move].get_piece_objects()[0]
+    king = players[color_to_move].get_king()
     in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
     if in_check:
         display_change = True

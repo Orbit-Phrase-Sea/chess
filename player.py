@@ -3,16 +3,19 @@ from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece, Position
 
 class Player:
 
-    def __init__(self, color: str, piece_setup: str="default") -> None:
+    def __init__(self, color: str, piece_setup: str='default') -> None:
+        if piece_setup not in ['default', 'empty']:
+            raise ValueError('piece_setup must be one of: "default", "empty"')
+
         self.color: str = color
         self.selected_piece = None
         self.en_passant_capturable = None
+        self.king = None
         self.move_history: list = []
         y_pos = 0 if color == 'b' else 7
-        if piece_setup not in ['default', 'empty']:
-            raise ValueError('piece_setup must be one of: "default", "empty"')
         if piece_setup == 'default':
-            self.active_piece_list: list = [King(color, initial_position=(4, y_pos), img_filename=color+'K.svg'),
+            self.king = King(color, initial_position=(4, y_pos), img_filename=color+'K.svg')
+            self.active_piece_list: list = [self.king,
                                             Bishop(self.color, initial_position=(2, y_pos), img_filename=color+'B.svg'),
                                             Bishop(self.color, initial_position=(5, y_pos), img_filename=color+'B.svg'),
                                             Knight(self.color, initial_position=(1, y_pos), img_filename=color+'N.svg'),
@@ -90,9 +93,9 @@ class Player:
                         q_rook = piece
                     elif piece.get_position()[0] == 7:
                         k_rook = piece
-        if type(self.selected_piece).__name__ == 'King' and position[0] - int(move_log[0]) == 2:
+        if self.selected_piece is self.king and position[0] - int(move_log[0]) == 2:
             k_rook.set_position((5, k_rook.get_position()[1]))
-        if type(self.selected_piece).__name__ == 'King' and int(move_log[0]) - position[0] == 2:
+        if self.selected_piece is self.king and int(move_log[0]) - position[0] == 2:
             q_rook.set_position((3, q_rook.get_position()[1]))
         self.move_history.append(move_log)
 
@@ -145,6 +148,10 @@ class Player:
 
     def get_selected_piece(self):
         return self.selected_piece
+
+
+    def get_king(self):
+        return self.king
 
 
     def get_piece_img_filenames(self) -> list:
