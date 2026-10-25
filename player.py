@@ -152,6 +152,14 @@ class Player:
         return self.selected_piece
 
 
+    def set_king(self, king: King) -> None:
+        if self.king is None:
+            self.active_piece_list.append(king)
+        else:
+            self.active_piece_list[0] = king
+        self.king = king
+
+
     def get_king(self):
         return self.king
 
