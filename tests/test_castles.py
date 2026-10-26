@@ -86,3 +86,37 @@ def test_castles_attacked_path(color_to_move, attacked_side):
 
     assert Counter(moves) == Counter(expected_moves)
 
+
+@pytest.mark.parametrize('blocking_color', ['w', 'b'])
+@pytest.mark.parametrize('blocked_side', ['king', 'queen', 'both'])
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+def test_castles_blocked(color_to_move, blocked_side, blocking_color):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king')
+            }
+    rank = 0 if color_to_move == 'b' else 7
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    blocking_color_opponent = 'w' if blocking_color == 'b' else 'b'
+
+    if blocked_side == 'queen':
+        players[blocking_color].add_piece(Bishop(blocking_color, (3, rank)), players[blocking_color_opponent])
+    elif blocked_side == 'king':
+        players[blocking_color].add_piece(Bishop(blocking_color, (5, rank)), players[blocking_color_opponent])
+    else:
+        players[blocking_color].add_piece(Bishop(blocking_color, (5, rank)), players[blocking_color_opponent])
+        players[blocking_color].add_piece(Bishop(blocking_color, (3, rank)), players[blocking_color_opponent])
+
+    players[color_to_move].add_piece(Rook(color_to_move, (0, rank)), players[opponent_color])
+    players[color_to_move].add_piece(Rook(color_to_move, (7, rank)), players[opponent_color])
+
+    moves = players[color_to_move].get_king().find_legal_moves(players['w'], players['b'], color_to_move)
+
+    if blocked_side == 'queen':
+        assert (6, rank) in moves and (2, rank) not in moves
+    elif blocked_side == 'king':
+        assert (2, rank) in moves and (6, rank) not in moves
+    else:
+        assert (6, rank) not in moves and (2, rank) not in moves
+
+
