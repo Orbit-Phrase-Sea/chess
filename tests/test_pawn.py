@@ -16,10 +16,11 @@ def test_pawn_first_moves(color_to_move, pawn_x):
             'b': Player('b', piece_setup='king')
             }
     rank = 1 if color_to_move == 'b' else 6
+    diraction = -1 if color_to_move == 'w' else 1
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players['b' if color_to_move == 'w' else 'w'])
 
-    expected_moves = [(pawn_x, rank+1), (pawn_x, rank+2)]
+    expected_moves = [(pawn_x, rank+diraction), (pawn_x, rank+diraction*2)]
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
     assert Counter(moves) == Counter(expected_moves)
