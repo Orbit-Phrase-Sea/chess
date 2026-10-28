@@ -120,3 +120,28 @@ def test_castles_blocked(color_to_move, blocked_side, blocking_color):
         assert (6, rank) not in moves and (2, rank) not in moves
 
 
+@pytest.mark.parametrize('side', ['king', 'queen'])
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+def test_position_after_castles(color_to_move, side):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king')
+            }
+    rank = 0 if color_to_move == 'b' else 7
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+
+    k_rook = Rook(color_to_move, (7, rank))
+    q_rook = Rook(color_to_move, (0, rank))
+    players[color_to_move].add_piece(q_rook, players[opponent_color])
+    players[color_to_move].add_piece(k_rook, players[opponent_color])
+
+    players[color_to_move].check_for_piece_selection((4, rank))
+    expected_king_position = (2 if side == 'queen' else 6, rank)
+    players[color_to_move].move_selected_piece(players[opponent_color], expected_king_position)
+
+    expected_k_rook_position = (7 if side == 'queen' else 5, rank)
+    expected_q_rook_position = (3 if side == 'queen' else 0, rank)
+
+    assert (expected_king_position, expected_q_rook_position, expected_k_rook_position)\
+            == (players[color_to_move].get_king().get_position(), q_rook.get_position(), k_rook.get_position())
+
