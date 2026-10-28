@@ -65,7 +65,8 @@ def test_pawn_promotion(color_to_move, pawn_x, promote_id):
     promotion_detected = players[color_to_move].is_to_promote()
     new_piece = players[color_to_move].promote(promote_id)
 
-    options = ['Queen', 'Rook', 'Knight', 'Bishop']
+    expected_piece = ['Queen', 'Rook', 'Knight', 'Bishop']
+    expected_position = (pawn_x, rank)
 
-    assert (promotion_detected, options[promote_id-1]) == (True, type(new_piece).__name__)
+    assert (promotion_detected, expected_piece[promote_id-1], expected_position) == (True, type(new_piece).__name__, new_piece.get_position())
 
