@@ -171,3 +171,33 @@ def test_castles_with_moved_king(color_to_move):
 
     assert Counter(moves) == Counter(expected_moves)
 
+
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+@pytest.mark.parametrize('rook_to_move', ['q_rook', 'k_rook'])
+def test_castles_with_moved_rook(color_to_move, rook_to_move):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king')
+            }
+    rank = 0 if color_to_move == 'b' else 7
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+
+    k_rook = Rook(color_to_move, (7, rank))
+    q_rook = Rook(color_to_move, (0, rank))
+    players[color_to_move].add_piece(q_rook, players[opponent_color])
+    players[color_to_move].add_piece(k_rook, players[opponent_color])
+
+    rook_x_move = 1 if rook_to_move == 'q_rook' else 6
+    rook = k_rook if rook_to_move == 'k_rook' else q_rook
+    players[color_to_move].check_for_piece_selection(rook.get_position())
+    players[color_to_move].move_selected_piece(players[opponent_color], (rook_x_move, rank))
+    players[color_to_move].check_for_piece_selection((rook_x_move, rank))
+    players[color_to_move].move_selected_piece(players[opponent_color], (0 if rook_to_move == 'q_rook' else 7, rank))
+
+    diraction = 1 if color_to_move == 'b' else -1
+    expected_moves = [(3, rank), (5, rank)] + [(i, rank+diraction) for i in range(3, 6)]
+    expected_moves.append((2 if rook_to_move == 'k_rook' else 6, rank))
+    moves = players[color_to_move].get_king().find_legal_moves(players['b'], players['w'], color_to_move)
+
+    assert Counter(moves) == Counter(expected_moves)
+
