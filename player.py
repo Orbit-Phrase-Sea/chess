@@ -136,8 +136,8 @@ class Player:
         options = [Queen, Rook, Knight, Bishop]
         piece_symbol = 'QRNB'
 
-        self.active_piece_list.insert(piece_idx, options[code-1](self.color, pos, img_filename=self.color+piece_symbol[code-1]+'.svg'))
-        return self.active_piece_list[piece_idx]
+        self.active_piece_list.append(options[code-1](self.color, pos, img_filename=self.color+piece_symbol[code-1]+'.svg'))
+        return self.active_piece_list[-1]
 
 
     def has_selected_piece(self) -> bool:
