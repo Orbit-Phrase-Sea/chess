@@ -60,7 +60,7 @@ def test_castles_attacked_path(color_to_move, attacked_side):
             }
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     rank = 0 if color_to_move == 'b' else 7
-    diraction = 1 if color_to_move == 'b' else -1
+    direction = 1 if color_to_move == 'b' else -1
 
     if attacked_side == 'king':
         bishop = Bishop(opponent_color, (2, 4 if color_to_move == 'w' else 3))
@@ -78,9 +78,9 @@ def test_castles_attacked_path(color_to_move, attacked_side):
     elif attacked_side == 'king':
         expected_moves = [(2, rank), (3, rank)]
     else:
-        expected_moves = [(4, rank+diraction)]
+        expected_moves = [(4, rank+direction)]
 
-    expected_moves += [(3, rank+diraction), (5, rank+diraction)]
+    expected_moves += [(3, rank+direction), (5, rank+direction)]
 
     moves = players[color_to_move].get_king().find_legal_moves(players['w'], players['b'], color_to_move)
 
@@ -165,8 +165,8 @@ def test_castles_with_moved_king(color_to_move):
     players[color_to_move].check_for_piece_selection((3, rank))
     players[color_to_move].move_selected_piece(players[opponent_color], (4, rank))
 
-    diraction = 1 if color_to_move == 'b' else -1
-    expected_moves = [(3, rank), (5, rank)] + [(i, rank+diraction) for i in range(3, 6)]
+    direction = 1 if color_to_move == 'b' else -1
+    expected_moves = [(3, rank), (5, rank)] + [(i, rank+direction) for i in range(3, 6)]
     moves = players[color_to_move].get_king().find_legal_moves(players['b'], players['w'], color_to_move)
 
     assert Counter(moves) == Counter(expected_moves)
@@ -194,8 +194,8 @@ def test_castles_with_moved_rook(color_to_move, rook_to_move):
     players[color_to_move].check_for_piece_selection((rook_x_move, rank))
     players[color_to_move].move_selected_piece(players[opponent_color], (0 if rook_to_move == 'q_rook' else 7, rank))
 
-    diraction = 1 if color_to_move == 'b' else -1
-    expected_moves = [(3, rank), (5, rank)] + [(i, rank+diraction) for i in range(3, 6)]
+    direction = 1 if color_to_move == 'b' else -1
+    expected_moves = [(3, rank), (5, rank)] + [(i, rank+direction) for i in range(3, 6)]
     expected_moves.append((2 if rook_to_move == 'k_rook' else 6, rank))
     moves = players[color_to_move].get_king().find_legal_moves(players['b'], players['w'], color_to_move)
 

@@ -16,11 +16,11 @@ def test_pawn_first_moves(color_to_move, pawn_x):
             'b': Player('b', piece_setup='king')
             }
     rank = 1 if color_to_move == 'b' else 6
-    diraction = -1 if color_to_move == 'w' else 1
+    direction = -1 if color_to_move == 'w' else 1
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players['b' if color_to_move == 'w' else 'w'])
 
-    expected_moves = [(pawn_x, rank+diraction), (pawn_x, rank+diraction*2)]
+    expected_moves = [(pawn_x, rank+direction), (pawn_x, rank+direction*2)]
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
     assert Counter(moves) == Counter(expected_moves)
@@ -34,17 +34,17 @@ def test_pawn_captures(color_to_move, pawn_x):
             'b': Player('b', piece_setup='king')
             }
     opponent_color = 'b' if color_to_move == 'w' else 'w'
-    diraction = -1 if color_to_move == 'w' else 1
+    direction = -1 if color_to_move == 'w' else 1
     rank = 4
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
-    players[color_to_move].add_piece(Knight(color_to_move, (pawn_x-1, rank+diraction)), players[opponent_color])
-    players[opponent_color].add_piece(Knight(opponent_color, (pawn_x+1, rank+diraction)), players[color_to_move])
-    players[opponent_color].add_piece(Knight(opponent_color, (pawn_x, rank+diraction)), players[color_to_move])
+    players[color_to_move].add_piece(Knight(color_to_move, (pawn_x-1, rank+direction)), players[opponent_color])
+    players[opponent_color].add_piece(Knight(opponent_color, (pawn_x+1, rank+direction)), players[color_to_move])
+    players[opponent_color].add_piece(Knight(opponent_color, (pawn_x, rank+direction)), players[color_to_move])
 
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
-    assert moves == [(pawn_x+1, rank+diraction)]
+    assert moves == [(pawn_x+1, rank+direction)]
 
 
 @pytest.mark.parametrize('forward_squares', [1, 2])
@@ -56,14 +56,14 @@ def test_pawn_second_moves(color_to_move, pawn_x, forward_squares):
             'b': Player('b', piece_setup='king')
             }
     rank = 1 if color_to_move == 'b' else 6
-    diraction = -1 if color_to_move == 'w' else 1
+    direction = -1 if color_to_move == 'w' else 1
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
     players[color_to_move].check_for_piece_selection((pawn_x, rank))
-    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+diraction*forward_squares))
+    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+direction*forward_squares))
 
-    expected_moves = [(pawn_x, rank+diraction*(1 + forward_squares))]
+    expected_moves = [(pawn_x, rank+direction*(1 + forward_squares))]
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
     assert Counter(moves) == Counter(expected_moves)
@@ -101,22 +101,22 @@ def test_captures_en_passant(color_to_move, pawn_x):
             }
 
     opponent_color = 'b' if color_to_move == 'w' else 'w'
-    diraction = -1 if color_to_move == 'w' else 1
+    direction = -1 if color_to_move == 'w' else 1
     rank = 3 if color_to_move == 'b' else 4
 
     pawn = Pawn(color_to_move, (pawn_x, rank))
-    opponent_pawn = Pawn(opponent_color, (pawn_x+1, rank+diraction*3))
+    opponent_pawn = Pawn(opponent_color, (pawn_x+1, rank+direction*3))
 
     players[color_to_move].add_piece(pawn, players[opponent_color])
     players[opponent_color].add_piece(opponent_pawn, players[color_to_move])
 
-    players[opponent_color].check_for_piece_selection((pawn_x+1, rank+diraction*3))
-    players[opponent_color].move_selected_piece(players[color_to_move], (pawn_x+1, rank+diraction*2))
+    players[opponent_color].check_for_piece_selection((pawn_x+1, rank+direction*3))
+    players[opponent_color].move_selected_piece(players[color_to_move], (pawn_x+1, rank+direction*2))
 
     players[color_to_move].check_for_piece_selection((pawn_x, rank))
-    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+diraction*2))
+    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+direction*2))
 
-    expected_moves = [(pawn_x, rank+diraction), (pawn_x+1, rank+diraction)]
+    expected_moves = [(pawn_x, rank+direction), (pawn_x+1, rank+direction)]
     moves = opponent_pawn.find_legal_moves(players['b'], players['w'], opponent_pawn.get_color())
 
     assert Counter(moves) == Counter(expected_moves)
@@ -131,29 +131,29 @@ def test_captures_en_passant_not_next_move(color_to_move, pawn_x):
             }
 
     opponent_color = 'b' if color_to_move == 'w' else 'w'
-    diraction = -1 if color_to_move == 'w' else 1
+    direction = -1 if color_to_move == 'w' else 1
     rank = 3 if color_to_move == 'b' else 4
 
     pawn = Pawn(color_to_move, (pawn_x, rank))
-    opponent_pawn = Pawn(opponent_color, (pawn_x+1, rank+diraction*3))
+    opponent_pawn = Pawn(opponent_color, (pawn_x+1, rank+direction*3))
 
     players[color_to_move].add_piece(pawn, players[opponent_color])
     players[opponent_color].add_piece(opponent_pawn, players[color_to_move])
 
-    players[opponent_color].check_for_piece_selection((pawn_x+1, rank+diraction*3))
-    players[opponent_color].move_selected_piece(players[color_to_move], (pawn_x+1, rank+diraction*2))
+    players[opponent_color].check_for_piece_selection((pawn_x+1, rank+direction*3))
+    players[opponent_color].move_selected_piece(players[color_to_move], (pawn_x+1, rank+direction*2))
 
     players[color_to_move].check_for_piece_selection((pawn_x, rank))
-    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+diraction*2))
+    players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+direction*2))
 
     opponent_rank = 0 if opponent_color == 'b' else 7
     players[opponent_color].check_for_piece_selection((4, opponent_rank))
     players[opponent_color].move_selected_piece(players[color_to_move], (5, opponent_rank))
 
-    players[color_to_move].check_for_piece_selection((4, rank-diraction*3))
-    players[color_to_move].move_selected_piece(players[opponent_color], (5, rank-diraction*3))
+    players[color_to_move].check_for_piece_selection((4, rank-direction*3))
+    players[color_to_move].move_selected_piece(players[opponent_color], (5, rank-direction*3))
 
-    expected_moves = [(pawn_x+1, rank+diraction)]
+    expected_moves = [(pawn_x+1, rank+direction)]
     moves = opponent_pawn.find_legal_moves(players['b'], players['w'], opponent_pawn.get_color())
 
     assert moves == expected_moves
