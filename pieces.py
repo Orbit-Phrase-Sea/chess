@@ -250,16 +250,16 @@ class Rook(Piece):
                 x_ally_intersects.append(pos[0])
 
 
-        x_opponent_interects, y_opponent_interects = [], []
+        x_opponent_intersects, y_opponent_intersects = [], []
         for piece in opponent.get_piece_objects():
             pos = piece.get_position()
             if pos[0] == self.position[0]:
-                y_opponent_interects.append(pos[1])
+                y_opponent_intersects.append(pos[1])
             elif pos[1] == self.position[1]:
-                x_opponent_interects.append(pos[0])
+                x_opponent_intersects.append(pos[0])
 
         x_ally_intersects, y_ally_intersects  = sorted(x_ally_intersects), sorted(y_ally_intersects)
-        x_opponent_interects, y_opponent_interects = sorted(x_opponent_interects), sorted(y_opponent_interects)
+        x_opponent_intersects, y_opponent_intersects = sorted(x_opponent_intersects), sorted(y_opponent_intersects)
         min_x, max_x = 0, 7
         min_y, max_y = 0, 7
         for i in x_ally_intersects:
@@ -276,7 +276,7 @@ class Rook(Piece):
             max_y = i - 1
             break
 
-        for i in y_opponent_interects:
+        for i in y_opponent_intersects:
             if i < min_y or i > max_y:
                 continue
             if i < self.position[1]:
@@ -284,7 +284,7 @@ class Rook(Piece):
                 continue
             max_y = i
 
-        for i in x_opponent_interects:
+        for i in x_opponent_intersects:
             if i < min_x or i > max_x:
                 continue
             if i < self.position[0]:
