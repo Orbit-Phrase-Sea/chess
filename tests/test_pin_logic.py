@@ -1,9 +1,9 @@
-from typing import Counter
+from collections import Counter
 import pytest
 
 
 from player import Player
-from pieces import Bishop, Pawn, Queen, Rook
+from pieces import Bishop, Knight, Pawn, Queen, Rook
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
@@ -40,4 +40,24 @@ def test_pin_2(color_to_move):
     expected_moves = [(4, 3), (4, 4), (4, 1 if color_to_move == 'b' else 6)]
 
     assert Counter(moves) == Counter(expected_moves)
+
+
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+def test_pin_3(color_to_move):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king'),
+            }
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    queen = Queen(opponent_color, (4, 1 if color_to_move == 'w' else 6))
+    knight_1 = Knight(color_to_move, (4, 6 if color_to_move == 'w' else 1))
+    knight_2 = Knight(color_to_move, (4, 3 if color_to_move == 'w' else 4))
+    players[opponent_color].add_piece(queen, players[color_to_move])
+    players[color_to_move].add_piece(knight_1, players[opponent_color])
+    players[color_to_move].add_piece(knight_2, players[opponent_color])
+
+    knight_1_has_moves = bool(knight_1.find_legal_moves(players['b'], players['w'], color_to_move))
+    knight_2_has_moves = bool(knight_2.find_legal_moves(players['b'], players['w'], color_to_move))
+
+    assert (knight_1_has_moves, knight_2_has_moves) == (True, True)
 
