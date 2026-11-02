@@ -151,8 +151,9 @@ def test_position_after_castles(color_to_move, side):
     expected_k_rook_position = (7 if side == 'queen' else 5, rank)
     expected_q_rook_position = (3 if side == 'queen' else 0, rank)
 
-    assert (expected_king_position, expected_q_rook_position, expected_k_rook_position)\
-            == (players[color_to_move].get_king().get_position(), q_rook.get_position(), k_rook.get_position())
+    assert expected_king_position == players[color_to_move].get_king().get_position()
+    assert expected_q_rook_position == q_rook.get_position()
+    assert expected_k_rook_position == k_rook.get_position()
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])

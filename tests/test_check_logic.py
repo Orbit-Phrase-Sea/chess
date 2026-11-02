@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 from player import Player
 
 
@@ -43,5 +40,6 @@ def test_checkmate_1():
             black_in_check = True
             break
 
-    assert (black_has_no_moves, black_in_check) == (True, True)
+    assert black_has_no_moves
+    assert black_in_check
 

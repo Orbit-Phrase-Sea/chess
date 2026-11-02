@@ -63,7 +63,7 @@ def test_pawn_second_moves(color_to_move, pawn_x, forward_squares):
     players[color_to_move].check_for_piece_selection((pawn_x, rank))
     players[color_to_move].move_selected_piece(players[opponent_color], (pawn_x, rank+direction*forward_squares))
 
-    expected_moves = [(pawn_x, rank+direction*(1 + forward_squares))]
+    expected_moves = [(pawn_x, rank + direction * (1+forward_squares))]
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
     assert Counter(moves) == Counter(expected_moves)
@@ -89,7 +89,9 @@ def test_pawn_promotion(color_to_move, pawn_x, promote_id):
     expected_piece = ['Queen', 'Rook', 'Knight', 'Bishop']
     expected_position = (pawn_x, rank)
 
-    assert (promotion_detected, expected_piece[promote_id-1], expected_position) == (True, type(new_piece).__name__, new_piece.get_position())
+    assert promotion_detected
+    assert expected_piece[promote_id-1] == type(new_piece).__name__
+    assert expected_position == new_piece.get_position()
 
 
 @pytest.mark.parametrize('pawn_x', range(1, 6))

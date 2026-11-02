@@ -20,7 +20,7 @@ def test_pin_1(color_to_move):
 
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
-    assert moves == []
+    assert not moves
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
@@ -59,5 +59,6 @@ def test_pin_3(color_to_move):
     knight_1_has_moves = bool(knight_1.find_legal_moves(players['b'], players['w'], color_to_move))
     knight_2_has_moves = bool(knight_2.find_legal_moves(players['b'], players['w'], color_to_move))
 
-    assert (knight_1_has_moves, knight_2_has_moves) == (True, True)
+    assert knight_1_has_moves
+    assert knight_2_has_moves
 
