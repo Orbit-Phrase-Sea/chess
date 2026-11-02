@@ -16,8 +16,11 @@ def test_bishop_edge_moves(color_to_move):
             }
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     players[color_to_move].add_piece(Bishop(color_to_move, (7, 0)), players[opponent_color])
+
     expected_moves = [(7-i, i) for i in range(1, 8)]
-    assert Counter(players[color_to_move].get_piece_objects()[-1].find_legal_moves(players['w'], players['b'], color_to_move)) == Counter(expected_moves)
+    moves = players[color_to_move].get_piece_objects()[-1].find_legal_moves(players['w'], players['b'], color_to_move)
+
+    assert Counter(moves) == Counter(expected_moves)
 
 
 
