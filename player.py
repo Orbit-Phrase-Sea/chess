@@ -110,6 +110,7 @@ class Player:
 
 
     def is_to_promote(self) -> bool:
+        """Returns True if there is a pawn that needs to promote, esle False"""
         for piece in self.active_piece_list:
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -119,7 +120,11 @@ class Player:
         return False
 
 
-    def promote(self, code: int) -> Piece:
+    def promote(self, promotion_id: int) -> Piece:
+        """Finds which pawn needs to promote and promotes it according to promotion_id (1->Queen, 2->Rook, 3->Knight, 4->Bishop).
+           If there isn't a pawn in need of promotion a RuntimeError is raised.
+           Removes the pawn from the active_piece_list.
+           Returns the created piece after the promotion."""
         for idx, piece in enumerate(self.active_piece_list):
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -136,7 +141,7 @@ class Player:
         options = [Queen, Rook, Knight, Bishop]
         piece_symbol = 'QRNB'
 
-        self.active_piece_list.append(options[code-1](self.color, pos, img_filename=self.color+piece_symbol[code-1]+'.svg'))
+        self.active_piece_list.append(options[promotion_id-1](self.color, pos, img_filename=self.color+piece_symbol[promotion_id-1]+'.svg'))
         return self.active_piece_list[-1]
 
 
