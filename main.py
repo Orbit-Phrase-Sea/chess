@@ -39,7 +39,7 @@ opponent_color: str = 'b'
 outcome: str = ''
 game_over: bool = False
 display_change: bool = True
-wait_for_promotion: bool = False
+promotion_in_progress: bool = False
 move_count: int = 0
 running: bool = True
 while running:
@@ -51,7 +51,7 @@ while running:
             running = False
             break
 
-        if wait_for_promotion:
+        if promotion_in_progress:
             if not event.type == pygame.KEYDOWN:
                 continue
 
@@ -62,7 +62,7 @@ while running:
             display_change = True
             new_piece = players[color_to_move].promote(promotion_options.index(event.key)+1)
             new_piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', new_piece.get_img_filename())))
-            wait_for_promotion = False
+            promotion_in_progress = False
             move_count += 1
             color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
             break
@@ -77,7 +77,7 @@ while running:
             if not players[color_to_move].check_for_piece_selection(square_position):
                 if players[color_to_move].move_selected_piece(players[opponent_color], square_position):
                     if players[color_to_move].is_to_promote():
-                        wait_for_promotion = True
+                        promotion_in_progress = True
                         print('To promote press: 1 (Queen), 2 (Rook), 3 (Knight), 4 (Bishop)')
                         continue
                     move_count += 1
