@@ -48,3 +48,40 @@ def test_bishop_with_piece(color_to_move, blocking_piece_color):
 
     assert Counter(moves) == Counter(expected_moves)
 
+
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+@pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
+def test_bishop_with_piece_2(color_to_move, blocking_piece_color):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king'),
+            }
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players[color_to_move].add_piece(Bishop(color_to_move, (0, 0)), players[opponent_color])
+    players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])
+
+    expected_moves = [] if color_to_move == blocking_piece_color else [(1, 1)]
+
+    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(players['w'], players['b'], color_to_move)
+
+    assert moves == expected_moves
+
+
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+@pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
+def test_bishop_with_piece_negative(color_to_move, blocking_piece_color):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king'),
+            }
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    bishop = Bishop(color_to_move, (0, 0))
+    players[color_to_move].add_piece(bishop, players[opponent_color])
+    players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])
+
+    players[color_to_move].check_for_piece_selection((0, 0))
+    moved = players[color_to_move].move_selected_piece(players[opponent_color], (2, 2))
+
+    assert not moved
+    assert bishop.get_position() == (0, 0)
+

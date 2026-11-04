@@ -62,3 +62,24 @@ def test_pin_3(color_to_move):
     assert knight_1_has_moves
     assert knight_2_has_moves
 
+
+@pytest.mark.parametrize('color_to_move', ['w', 'b'])
+def test_pin_negative(color_to_move):
+    players = {
+            'w': Player('w', piece_setup='king'),
+            'b': Player('b', piece_setup='king'),
+            }
+    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    rank = 1 if color_to_move == 'b' else 6
+    direction = -1 if color_to_move == 'w' else 1
+
+    pawn = Pawn(color_to_move, (5, rank))
+    players[color_to_move].add_piece(pawn, players[opponent_color])
+    players[opponent_color].add_piece(Bishop(opponent_color, (7, 4 if color_to_move=='w' else 3)), players[opponent_color])
+
+    players[color_to_move].check_for_piece_selection(pawn.get_position())
+    moved = players[color_to_move].move_selected_piece(players[opponent_color], (5, rank+direction))
+
+    assert not moved
+    assert pawn.get_position() == (5, rank)
+
