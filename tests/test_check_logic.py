@@ -1,25 +1,16 @@
 def test_checkmate_1(players_setup):
     players = players_setup('default')
 
-    # 1. e4 ...
-    players['w'].check_for_piece_selection((4, 6))
-    players['w'].move_selected_piece(players['b'], (4, 4))
-
-    # 1. e4 g5
-    players['b'].check_for_piece_selection((6, 1))
-    players['b'].move_selected_piece(players['w'], (6, 3))
-
-    # 2. d4 ...
-    players['w'].check_for_piece_selection((3, 6))
-    players['w'].move_selected_piece(players['b'], (3, 4))
-
-    # 2. d4 f6
-    players['b'].check_for_piece_selection((5, 1))
-    players['b'].move_selected_piece(players['w'], (5, 2))
-
-    # 3. Qh5#
-    players['w'].check_for_piece_selection((3, 7))
-    players['w'].move_selected_piece(players['b'], (7, 3))
+    # e4 g5, d4 f6, Qh5#
+    for color, m_from, m_to in [
+            ['w', (4, 6), (4, 4)], # e4
+            ['b', (6, 1), (6, 3)], # g5
+            ['w', (3, 6), (3, 4)], # d4
+            ['b', (5, 1), (5, 2)], # f6
+            ['w', (3, 7), (7, 3)], # Qh5#
+            ]:
+        players[color].check_for_piece_selection(m_from)
+        players[color].move_selected_piece(players['b' if color == 'w' else 'w'], m_to)
 
     black_has_no_moves = True
     for piece in players['b'].get_piece_objects():
