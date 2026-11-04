@@ -13,11 +13,11 @@ class Piece:
     def __init__(self, color: str, initial_position: Position, img_filename: str='') -> None:
         if color not in ['w', 'b']:
             raise ValueError('color must be "w" or "b"')
-        self.color = color
 
         if 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
             raise ValueError('The elements of initial_position must be in [0, 7] exclusively')
 
+        self.color: str = color
         self.position: Position = initial_position
         self.img_filename: str = img_filename
         self.selected: bool = False
@@ -34,7 +34,7 @@ class Piece:
         return 0
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         """Returns a list containing the positions that are legal to move to."""
 
         if color_to_move != 'b' and color_to_move != 'w':
@@ -75,7 +75,7 @@ class Piece:
         return False
 
 
-    def _filter_for_checks(self, *, ally: player.Player, opponent: player.Player, color_to_move: str, moves: list) -> list:
+    def _filter_for_checks(self, *, ally: player.Player, opponent: player.Player, color_to_move: str, moves: list) -> list[Position]:
         """Filters a list of moves and returns only the moves that don't put the player with color=color_to_move in check."""
 
         filtered_moves = []
@@ -135,7 +135,7 @@ class Piece:
 class King(Piece):
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -206,7 +206,7 @@ class King(Piece):
 class Bishop(Piece):
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -241,7 +241,7 @@ class Bishop(Piece):
 class Rook(Piece):
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -316,7 +316,7 @@ class Rook(Piece):
 class Knight(Piece):
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
         ally_piece_pos = [piece.get_position() for piece in ally.get_piece_objects()]
@@ -334,7 +334,7 @@ class Knight(Piece):
 class Pawn(Piece):
 
 
-    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+    def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list[Position]:
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 

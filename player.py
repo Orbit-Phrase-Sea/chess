@@ -8,13 +8,13 @@ class Player:
             raise ValueError('piece_setup must be one of: "default", "empty"')
 
         self.color: str = color
-        self.selected_piece = None
-        self.en_passant_capturable = None
-        self.king = None
-        self.active_piece_list: list = []
-        self.move_history: list = []
-        rank = 0 if color == 'b' else 7
+        self.selected_piece: Piece|None = None
+        self.en_passant_capturable: Pawn|None = None
+        self.king: King|None = None
+        self.active_piece_list: list[Piece] = []
+        self.move_history: list[str] = []
 
+        rank = 0 if color == 'b' else 7
         if piece_setup == 'default' or piece_setup == 'king':
             self.king = King(color, initial_position=(4, rank), img_filename=color+'K.svg')
             self.active_piece_list.append(self.king)
@@ -165,7 +165,7 @@ class Player:
         self.selected_piece = None
 
 
-    def get_selected_piece(self):
+    def get_selected_piece(self) -> Piece|None:
         return self.selected_piece
 
 
@@ -202,24 +202,24 @@ class Player:
         self.king = king
 
 
-    def get_king(self):
+    def get_king(self) -> King|None:
         return self.king
 
 
-    def get_piece_img_filenames(self) -> list:
+    def get_piece_img_filenames(self) -> list[str]:
         img_filenames = [piece.get_img_filename() for piece in self.active_piece_list]
         return img_filenames
 
 
-    def get_piece_objects(self) -> list:
+    def get_piece_objects(self) -> list[Piece]:
         return self.active_piece_list
 
 
-    def set_en_passant_capturable(self, piece) -> None:
+    def set_en_passant_capturable(self, piece: Pawn|None) -> None:
         self.en_passant_capturable = piece
 
 
-    def get_en_passant_capturable(self):
+    def get_en_passant_capturable(self) -> Pawn|None:
         return self.en_passant_capturable
 
 
