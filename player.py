@@ -32,7 +32,7 @@ class Player:
 
 
     def check_for_piece_selection(self, position: Position) -> bool:
-        """Returns True if a piece was selected and False otherwise"""
+        """Returns True if a piece got selected and False otherwise"""
 
         for piece in self.get_piece_objects():
             if piece.get_position()[0] == position[0] and piece.get_position()[1] == position[1]:
@@ -55,6 +55,14 @@ class Player:
 
 
     def move_selected_piece(self, opponent: Player, position: Position) -> bool:
+        """
+        Moves selected_piece to position if the move is legal.
+        Performs resulting captures.
+        Handles castles.
+        Handles en-passant (both captures and setup).
+        Return True if the piece moved otherwise False.
+        """
+
         if opponent.get_color() == self.color:
             raise ValueError("opponent.color cannot be the same as self.color")
 
@@ -111,6 +119,7 @@ class Player:
 
     def is_to_promote(self) -> bool:
         """Returns True if there is a pawn that needs to promote, esle False"""
+
         for piece in self.active_piece_list:
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -121,10 +130,13 @@ class Player:
 
 
     def promote(self, promotion_id: int) -> Piece:
-        """Finds which pawn needs to promote and promotes it according to promotion_id (1->Queen, 2->Rook, 3->Knight, 4->Bishop).
-           If there isn't a pawn in need of promotion a RuntimeError is raised.
-           Removes the pawn from the active_piece_list.
-           Returns the created piece after the promotion."""
+        """
+        Finds which pawn needs to promote and promotes it according to promotion_id (1->Queen, 2->Rook, 3->Knight, 4->Bishop).
+        If there isn't a pawn in need of promotion a RuntimeError is raised.
+        Removes the pawn from the active_piece_list.
+        Returns the created piece after the promotion.
+        """
+
         for idx, piece in enumerate(self.active_piece_list):
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -158,6 +170,8 @@ class Player:
 
 
     def add_piece(self, new_piece: Piece, opponent: Player) -> None:
+        """Adds a new active piece to the player, requires the opponent to perform validity checks."""
+
         if isinstance(new_piece, King):
             raise ValueError("Use the set_king method to set the king instead")
         if new_piece.get_color() != self.color:

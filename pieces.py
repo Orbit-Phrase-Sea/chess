@@ -35,6 +35,7 @@ class Piece:
 
 
     def find_legal_moves(self, player_1: player.Player, player_2: player.Player, color_to_move: str) -> list:
+        """Returns a list containing the positions that are legal to move to."""
 
         if color_to_move != 'b' and color_to_move != 'w':
             raise ValueError('color_to_move must be "w" or "b"')
@@ -43,6 +44,7 @@ class Piece:
 
 
     def check_for_checks(self, *, ally: player.Player, opponent: player.Player, position: Position, color_to_move: str) -> bool:
+        """Returns True if moving to position puts color_to_move in check, otherwise returns False."""
 
         if self.color != color_to_move:
             return False
@@ -74,6 +76,8 @@ class Piece:
 
 
     def _filter_for_checks(self, *, ally: player.Player, opponent: player.Player, color_to_move: str, moves: list) -> list:
+        """Filters a list of moves and returns only the moves that don't put the player with color=color_to_move in check."""
+
         filtered_moves = []
         for move in moves:
             if self.check_for_checks(ally=ally, opponent=opponent, position=move, color_to_move=color_to_move):
@@ -84,8 +88,11 @@ class Piece:
 
 
     def ally_opponent(self, player_1: player.Player, player_2: player.Player) -> tuple[player.Player, player.Player]:
+        """Take two players and returns tuple(ally, opponent)"""
+
         if player_1.get_color() == self.color:
             return player_1, player_2
+
         return player_2, player_1
 
 
