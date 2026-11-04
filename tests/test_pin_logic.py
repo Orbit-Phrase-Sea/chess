@@ -1,17 +1,15 @@
 from collections import Counter
+
+
 import pytest
 
 
-from player import Player
 from pieces import Bishop, Knight, Pawn, Queen, Rook
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_pin_1(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='king'),
-            'b': Player('b', piece_setup='king'),
-            }
+def test_pin_1(players_setup, color_to_move):
+    players = players_setup('king')
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     rank = 1 if color_to_move == 'b' else 6
     pawn = Pawn(color_to_move, (5, rank))
@@ -24,11 +22,8 @@ def test_pin_1(color_to_move):
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_pin_2(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='king'),
-            'b': Player('b', piece_setup='king'),
-            }
+def test_pin_2(players_setup, color_to_move):
+    players = players_setup('king')
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     rank = 2 if color_to_move == 'b' else 5
     queen = Queen(color_to_move, (4, rank))
@@ -43,11 +38,8 @@ def test_pin_2(color_to_move):
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_pin_3(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='king'),
-            'b': Player('b', piece_setup='king'),
-            }
+def test_pin_3(players_setup, color_to_move):
+    players = players_setup('king')
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     queen = Queen(opponent_color, (4, 1 if color_to_move == 'w' else 6))
     knight_1 = Knight(color_to_move, (4, 6 if color_to_move == 'w' else 1))
@@ -64,11 +56,8 @@ def test_pin_3(color_to_move):
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_pin_negative(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='king'),
-            'b': Player('b', piece_setup='king'),
-            }
+def test_pin_negative(players_setup, color_to_move):
+    players = players_setup('king')
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     rank = 1 if color_to_move == 'b' else 6
     direction = -1 if color_to_move == 'w' else 1

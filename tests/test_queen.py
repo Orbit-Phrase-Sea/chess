@@ -4,16 +4,12 @@ from collections import Counter
 import pytest
 
 
-from player import Player
 from pieces import Queen
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_queen_basic_moves(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='king'),
-            'b': Player('b', piece_setup='king')
-            }
+def test_queen_basic_moves(players_setup, color_to_move):
+    players = players_setup('king')
     queen_pos = (5, 3)
     queen = Queen(color_to_move, queen_pos)
     players[color_to_move].add_piece(queen, players['b' if color_to_move == 'w' else 'w'])

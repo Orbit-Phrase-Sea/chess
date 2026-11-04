@@ -1,11 +1,5 @@
-from player import Player
-
-
-def test_checkmate_1():
-    players = {
-            'w': Player('w', piece_setup='default'),
-            'b': Player('b', piece_setup='default')
-            }
+def test_checkmate_1(players_setup):
+    players = players_setup('default')
 
     # 1. e4 ...
     players['w'].check_for_piece_selection((4, 6))

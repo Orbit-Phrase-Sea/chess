@@ -4,18 +4,17 @@ from collections import Counter
 import pytest
 
 
-from player import Player
 from pieces import King
 
 
 @pytest.mark.parametrize('color', ['w', 'b'])
-def test_king_init(color):
-    player = Player(color, piece_setup='king')
+def test_king_init(players_setup, color):
+    players = players_setup('king')
     rank = 0 if color == 'b' else 7
 
-    piece_type = type(player.get_king()).__name__
-    selection_state =  player.get_king().is_selected()
-    position = player.get_king().get_position()
+    piece_type = type(players[color].get_king()).__name__
+    selection_state =  players[color].get_king().is_selected()
+    position = players[color].get_king().get_position()
 
     assert piece_type == 'King'
     assert selection_state == False
@@ -23,11 +22,8 @@ def test_king_init(color):
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_edge_king_moves(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='empty'),
-            'b': Player('b', piece_setup='empty')
-            }
+def test_edge_king_moves(players_setup, color_to_move):
+    players = players_setup('empty')
     players['w'].set_king(King('w', (0, 7)), players['b'])
     players['b'].set_king(King('b', (7, 7)), players['w'])
 
@@ -38,11 +34,8 @@ def test_edge_king_moves(color_to_move):
 
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
-def test_middle_king_moves(color_to_move):
-    players = {
-            'w': Player('w', piece_setup='empty'),
-            'b': Player('b', piece_setup='empty')
-            }
+def test_middle_king_moves(players_setup, color_to_move):
+    players = players_setup('empty')
     players['w'].set_king(King('w', (1, 4)), players['b'])
     players['b'].set_king(King('b', (4, 2)), players['w'])
 
