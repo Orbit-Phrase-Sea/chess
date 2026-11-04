@@ -9,7 +9,7 @@ from pieces import King
 
 @pytest.mark.parametrize('color', ['w', 'b'])
 def test_king_init(players_setup, color):
-    players = players_setup('king')
+    players, _ = players_setup('king')
     rank = 0 if color == 'b' else 7
 
     piece_type = type(players[color].get_king()).__name__
@@ -23,7 +23,7 @@ def test_king_init(players_setup, color):
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_edge_king_moves(players_setup, color_to_move):
-    players = players_setup('empty')
+    players, _ = players_setup('empty')
     players['w'].set_king(King('w', (0, 7)), players['b'])
     players['b'].set_king(King('b', (7, 7)), players['w'])
 
@@ -35,7 +35,7 @@ def test_edge_king_moves(players_setup, color_to_move):
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_middle_king_moves(players_setup, color_to_move):
-    players = players_setup('empty')
+    players, _ = players_setup('empty')
     players['w'].set_king(King('w', (1, 4)), players['b'])
     players['b'].set_king(King('b', (4, 2)), players['w'])
 

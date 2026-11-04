@@ -10,7 +10,7 @@ from pieces import Rook, Bishop
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('side', ['queen', 'king', 'both'])
 def test_castles_empty_board(players_setup, color_to_move, side):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     opponent_color = 'w' if color_to_move == 'b' else 'b'
     rank = 0 if color_to_move == 'b' else 7
     if side == 'queen':
@@ -33,8 +33,7 @@ def test_castles_empty_board(players_setup, color_to_move, side):
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_castles_in_check(players_setup, color_to_move):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
     bishop = Bishop(opponent_color, (1, 4 if color_to_move == 'w' else 3))
 
@@ -56,8 +55,7 @@ def test_castles_in_check(players_setup, color_to_move):
 @pytest.mark.parametrize('attacked_side', ['queen', 'king', 'both'])
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_castles_attacked_path(players_setup, color_to_move, attacked_side):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
     direction = 1 if color_to_move == 'b' else -1
 
@@ -90,9 +88,8 @@ def test_castles_attacked_path(players_setup, color_to_move, attacked_side):
 @pytest.mark.parametrize('blocked_side', ['king', 'queen', 'both'])
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_castles_blocked(players_setup, color_to_move, blocked_side, blocking_color):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
     blocking_color_opponent = 'w' if blocking_color == 'b' else 'b'
 
     if blocked_side == 'queen':
@@ -119,9 +116,8 @@ def test_castles_blocked(players_setup, color_to_move, blocked_side, blocking_co
 @pytest.mark.parametrize('side', ['king', 'queen'])
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_position_after_castles(players_setup, color_to_move, side):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
 
     k_rook = Rook(color_to_move, (7, rank))
     q_rook = Rook(color_to_move, (0, rank))
@@ -142,9 +138,8 @@ def test_position_after_castles(players_setup, color_to_move, side):
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_castles_with_moved_king(players_setup, color_to_move):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
 
     k_rook = Rook(color_to_move, (7, rank))
     q_rook = Rook(color_to_move, (0, rank))
@@ -166,9 +161,8 @@ def test_castles_with_moved_king(players_setup, color_to_move):
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('rook_to_move', ['q_rook', 'k_rook'])
 def test_castles_with_moved_rook(players_setup, color_to_move, rook_to_move):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 0 if color_to_move == 'b' else 7
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
 
     k_rook = Rook(color_to_move, (7, rank))
     q_rook = Rook(color_to_move, (0, rank))

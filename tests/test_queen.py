@@ -9,10 +9,10 @@ from pieces import Queen
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_queen_basic_moves(players_setup, color_to_move):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     queen_pos = (5, 3)
     queen = Queen(color_to_move, queen_pos)
-    players[color_to_move].add_piece(queen, players['b' if color_to_move == 'w' else 'w'])
+    players[color_to_move].add_piece(queen, players[opponent_color])
 
     expected_moves = []
     # Find rook moves

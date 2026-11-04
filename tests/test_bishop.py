@@ -9,8 +9,7 @@ from pieces import Bishop, Pawn
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_bishop_edge_moves(players_setup, color_to_move):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     players[color_to_move].add_piece(Bishop(color_to_move, (7, 0)), players[opponent_color])
 
     expected_moves = [(7-i, i) for i in range(1, 8)]
@@ -23,8 +22,7 @@ def test_bishop_edge_moves(players_setup, color_to_move):
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_bishop_with_piece(players_setup, color_to_move, blocking_piece_color):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     players[color_to_move].add_piece(Bishop(color_to_move, (6, 4)), players[opponent_color])
     players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (5, 5)), players[opponent_color])
 
@@ -45,8 +43,7 @@ def test_bishop_with_piece(players_setup, color_to_move, blocking_piece_color):
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_bishop_with_piece_2(players_setup, color_to_move, blocking_piece_color):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     players[color_to_move].add_piece(Bishop(color_to_move, (0, 0)), players[opponent_color])
     players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])
 
@@ -60,8 +57,7 @@ def test_bishop_with_piece_2(players_setup, color_to_move, blocking_piece_color)
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_bishop_with_piece_negative(players_setup, color_to_move, blocking_piece_color):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     bishop = Bishop(color_to_move, (0, 0))
     players[color_to_move].add_piece(bishop, players[opponent_color])
     players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])

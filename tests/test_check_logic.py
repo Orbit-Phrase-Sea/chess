@@ -1,5 +1,5 @@
 def test_checkmate_1(players_setup):
-    players = players_setup('default')
+    players, _ = players_setup('default')
 
     # e4 g5, d4 f6, Qh5#
     for color, m_from, m_to in [

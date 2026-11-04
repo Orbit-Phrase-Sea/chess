@@ -10,11 +10,11 @@ from pieces import King, Knight, Pawn
 @pytest.mark.parametrize('pawn_x', range(8))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_pawn_first_moves(players_setup, color_to_move, pawn_x):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 1 if color_to_move == 'b' else 6
     direction = -1 if color_to_move == 'w' else 1
     pawn = Pawn(color_to_move, (pawn_x, rank))
-    players[color_to_move].add_piece(pawn, players['b' if color_to_move == 'w' else 'w'])
+    players[color_to_move].add_piece(pawn, players[opponent_color])
 
     expected_moves = [(pawn_x, rank+direction), (pawn_x, rank+direction*2)]
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
@@ -25,8 +25,7 @@ def test_pawn_first_moves(players_setup, color_to_move, pawn_x):
 @pytest.mark.parametrize('pawn_x', range(1, 6))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_pawn_captures(players_setup, color_to_move, pawn_x):
-    players = players_setup('king')
-    opponent_color = 'b' if color_to_move == 'w' else 'w'
+    players, opponent_color = players_setup('king', color_to_move)
     direction = -1 if color_to_move == 'w' else 1
     rank = 4
     pawn = Pawn(color_to_move, (pawn_x, rank))
@@ -44,10 +43,9 @@ def test_pawn_captures(players_setup, color_to_move, pawn_x):
 @pytest.mark.parametrize('pawn_x', range(8))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_pawn_second_moves(players_setup, color_to_move, pawn_x, forward_squares):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
     rank = 1 if color_to_move == 'b' else 6
     direction = -1 if color_to_move == 'w' else 1
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
     players[color_to_move].check_for_piece_selection((pawn_x, rank))
@@ -63,11 +61,10 @@ def test_pawn_second_moves(players_setup, color_to_move, pawn_x, forward_squares
 @pytest.mark.parametrize('pawn_x', range(8))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_pawn_promotion(players_setup, color_to_move, pawn_x, promote_id):
-    players = players_setup('empty')
+    players, opponent_color = players_setup('empty', color_to_move)
     players['w'].set_king(King('w', (5, 4)), players['b'])
     players['b'].set_king(King('b', (3, 4)), players['w'])
     rank = 7 if color_to_move == 'b' else 0
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
     pawn = Pawn(color_to_move, (pawn_x, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
     promotion_detected = players[color_to_move].is_to_promote()
@@ -84,9 +81,8 @@ def test_pawn_promotion(players_setup, color_to_move, pawn_x, promote_id):
 @pytest.mark.parametrize('pawn_x', range(1, 6))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_captures_en_passant(players_setup, color_to_move, pawn_x):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
 
-    opponent_color = 'b' if color_to_move == 'w' else 'w'
     direction = -1 if color_to_move == 'w' else 1
     rank = 3 if color_to_move == 'b' else 4
 
@@ -111,9 +107,8 @@ def test_captures_en_passant(players_setup, color_to_move, pawn_x):
 @pytest.mark.parametrize('pawn_x', range(1, 6))
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_captures_en_passant_not_next_move(players_setup, color_to_move, pawn_x):
-    players = players_setup('king')
+    players, opponent_color = players_setup('king', color_to_move)
 
-    opponent_color = 'b' if color_to_move == 'w' else 'w'
     direction = -1 if color_to_move == 'w' else 1
     rank = 3 if color_to_move == 'b' else 4
 

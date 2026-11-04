@@ -9,8 +9,7 @@ from pieces import Rook, Knight
 
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_knight_edge_moves(players_setup, color_to_move):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     players[color_to_move].add_piece(Knight(color_to_move, (0, 0)), players[opponent_color])
 
     expected_moves = [(1, 2), (2, 1)]
@@ -23,8 +22,7 @@ def test_knight_edge_moves(players_setup, color_to_move):
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_knight_with_piece(players_setup, color_to_move, blocking_piece_color):
-    players = players_setup('king')
-    opponent_color = 'w' if color_to_move == 'b' else 'b'
+    players, opponent_color = players_setup('king', color_to_move)
     players[color_to_move].add_piece(Knight(color_to_move, (3, 3)), players[opponent_color])
     players[blocking_piece_color].add_piece(Rook(blocking_piece_color, (2, 5)), players[opponent_color])
 
