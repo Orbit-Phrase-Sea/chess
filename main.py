@@ -52,7 +52,7 @@ while running:
             break
 
         if promotion_in_progress:
-            if not event.type == pygame.KEYDOWN:
+            if event.type != pygame.KEYDOWN:
                 continue
 
             # 1 = queen, 2 = rook, 3 = knite, 4 = bishop
@@ -74,8 +74,9 @@ while running:
             square_position = int(mouse_x//(Display.WIDTH/8)), int(mouse_y//(Display.HEIGHT/8))
             players[color_to_move].set_en_passant_capturable(players[opponent_color].get_en_passant_capturable())
 
-            if not players[color_to_move].check_for_piece_selection(square_position):
-                if players[color_to_move].move_selected_piece(players[opponent_color], square_position):
+            if (not players[color_to_move].check_for_piece_selection(square_position)
+                and players[color_to_move].move_selected_piece(players[opponent_color], square_position)
+                ):
                     if players[color_to_move].is_to_promote():
                         promotion_in_progress = True
                         print('To promote press: 1 (Queen), 2 (Rook), 3 (Knight), 4 (Bishop)')

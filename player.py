@@ -158,7 +158,7 @@ class Player:
 
 
     def has_selected_piece(self) -> bool:
-        return True if self.selected_piece else False
+        return bool(self.selected_piece)
 
 
     def remove_selection(self) -> None:
