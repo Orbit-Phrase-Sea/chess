@@ -8,9 +8,9 @@ class Player:
             raise ValueError('piece_setup must be one of: "default", "empty"')
 
         self.color: str = color
-        self.selected_piece: Piece|None = None
-        self.en_passant_capturable: Pawn|None = None
-        self.king: King|None = None
+        self.selected_piece: Piece | None = None
+        self.en_passant_capturable: Pawn | None = None
+        self.king: King | None = None
         self.active_piece_list: list[Piece] = []
         self.move_history: list[str] = []
 
@@ -165,7 +165,7 @@ class Player:
         self.selected_piece = None
 
 
-    def get_selected_piece(self) -> Piece|None:
+    def get_selected_piece(self) -> Piece | None:
         return self.selected_piece
 
 
@@ -202,7 +202,7 @@ class Player:
         self.king = king
 
 
-    def get_king(self) -> King|None:
+    def get_king(self) -> King | None:
         return self.king
 
 
@@ -215,11 +215,11 @@ class Player:
         return self.active_piece_list
 
 
-    def set_en_passant_capturable(self, piece: Pawn|None) -> None:
+    def set_en_passant_capturable(self, piece: Pawn | None) -> None:
         self.en_passant_capturable = piece
 
 
-    def get_en_passant_capturable(self) -> Pawn|None:
+    def get_en_passant_capturable(self) -> Pawn | None:
         return self.en_passant_capturable
 
 
