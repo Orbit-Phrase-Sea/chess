@@ -1,0 +1,10 @@
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors (whitespace, indentation, E501 line length)
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes (unused imports, undefined names)
+    "I",    # import ordering
+    "N",    # pep8-naming (function, class, and variable naming)
+    "D",    # pydocstyle docstring checks
+]
+
