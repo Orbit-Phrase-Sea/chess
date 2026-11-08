@@ -1,8 +1,9 @@
+"""Entry point of the chess project."""
+
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 import pygame
-
 
 from constants import Display
 from player import Player
@@ -15,7 +16,9 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((Display.WIDTH, Display.HEIGHT))
 
 board = pygame.image.load(os.path.join('assets', 'boards', 'maple.jpg'))
-check_indicator = pygame.image.load(os.path.join('assets', 'check_indicators', 'red_blur.png'))
+check_indicator = pygame.image.load(
+    os.path.join('assets', 'check_indicators', 'red_blur.png')
+)
 
 players = {
         'w' : Player('w'),
@@ -25,13 +28,23 @@ players = {
 
 # Set piece images
 for player in players.values():
-    for filename, piece in zip(player.get_piece_img_filenames(), player.get_piece_objects()):
-        piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', filename)))
+    for filename, piece in zip(
+        player.get_piece_img_filenames(),
+        player.get_piece_objects(),
+    ):
+        piece.set_img(
+            pygame.image.load(
+                os.path.join('assets', 'piece_sets', 'cburnett', filename)
+            )
+        )
 
 # Check for player without a king
 for player in players.values():
     if player.get_king() is None:
-        raise RuntimeError(f"The first item of a player.active_piece_list must be a king.\nFaulty player color: {player.get_color()}")
+        raise RuntimeError(
+            f"""The first item of a player.active_piece_list must be a king.
+                \nFaulty player color: {player.get_color()}"""
+        )
 
 # Game loop
 color_to_move: str = 'w'
@@ -47,7 +60,10 @@ while running:
 
     # Event handler
     for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+        if (
+            event.type == pygame.QUIT
+            or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)
+        ):
             running = False
             break
 
@@ -60,8 +76,19 @@ while running:
             if event.key not in promotion_options:
                 continue
             display_change = True
-            new_piece = players[color_to_move].promote(promotion_options.index(event.key)+1)
-            new_piece.set_img(pygame.image.load(os.path.join('assets', 'piece_sets', 'cburnett', new_piece.get_img_filename())))
+            new_piece = players[color_to_move].promote(
+                promotion_options.index(event.key)+1
+            )
+            new_piece.set_img(
+                pygame.image.load(
+                    os.path.join(
+                        'assets',
+                        'piece_sets',
+                        'cburnett',
+                        new_piece.get_img_filename()
+                    )
+                )
+            )
             promotion_in_progress = False
             move_count += 1
             color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
@@ -71,25 +98,40 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
             display_change = True
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            square_position = int(mouse_x//(Display.WIDTH/8)), int(mouse_y//(Display.HEIGHT/8))
+            square_position = (
+                int(mouse_x//(Display.WIDTH/8)),
+                int(mouse_y//(Display.HEIGHT/8)),
+            )
             players[color_to_move].set_en_passant_capturable(players[opponent_color].get_en_passant_capturable())
 
-            if (not players[color_to_move].check_for_piece_selection(square_position)
-                and players[color_to_move].move_selected_piece(players[opponent_color], square_position)
+            if (
+                not players[color_to_move].check_for_piece_selection(square_position)
+                and players[color_to_move].move_selected_piece(
+                        players[opponent_color],
+                        square_position,
+                    )
                 ):
                     if players[color_to_move].is_to_promote():
                         promotion_in_progress = True
-                        print('To promote press: 1 (Queen), 2 (Rook), 3 (Knight), 4 (Bishop)')
+                        print(
+                            'To promote press: 1 (Queen), 2 (Rook), 3 (Knight), 4 (Bishop)'
+                        )
                         continue
                     move_count += 1
-                    color_to_move, opponent_color = ('b', 'w') if move_count%2 else ('w', 'b')
+                    color_to_move = 'b' if move_count%2 else 'w'
+                    opponent_color = 'w' if move_count%2 else 'b'
 
     if game_over:
         continue
 
     # Check for check
     king = players[color_to_move].get_king()
-    in_check = king.check_for_checks(ally=players[color_to_move], opponent=players[opponent_color], position=king.get_position(), color_to_move=color_to_move)
+    in_check = king.check_for_checks(
+        ally=players[color_to_move],
+        opponent=players[opponent_color],
+        position=king.get_position(),
+        color_to_move=color_to_move,
+    )
     if in_check:
         display_change = True
 
@@ -112,7 +154,10 @@ while running:
         continue
 
     # Draw
-    pygame.display.set_caption(f'Chess | {"white" if color_to_move=="w" else "black"} to play | move: {move_count//2+1} | {outcome}')
+    pygame.display.set_caption(
+        f'Chess | {"white" if color_to_move=="w" else "black"} to play '
+        + f'| move: {move_count//2+1} | {outcome}'
+    )
     screen.blit(board, (0, 0))
 
     if in_check:
@@ -129,8 +174,17 @@ while running:
     # Draw legal moves of selected piece
     selected_piece = players[color_to_move].get_selected_piece()
     if selected_piece is not None:
-        for move in selected_piece.find_legal_moves(players['b'], players['w'], color_to_move):
-            pygame.draw.circle(screen, (0, 255, 0), ((.5+move[0])*Display.WIDTH/8, (.5+move[1])*Display.HEIGHT/8), 10)
+        for move in selected_piece.find_legal_moves(
+            players['b'],
+            players['w'],
+            color_to_move
+        ):
+            pygame.draw.circle(
+                screen,
+                (0, 255, 0),
+                ((.5+move[0])*Display.WIDTH/8, (.5+move[1])*Display.HEIGHT/8),
+                10,
+            )
 
     display_change = False
     pygame.display.flip()
