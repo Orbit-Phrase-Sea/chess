@@ -1,9 +1,16 @@
+"""Player module.
+
+All players are defined here.
+"""
+
 from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece, Position
 
 
 class Player:
+    """Fully functional Player class."""
 
     def __init__(self, color: str, piece_setup: str='default') -> None:
+        """Initialize Player."""
         if piece_setup not in ['default', 'king', 'empty']:
             raise ValueError('piece_setup must be one of: "default", "empty"')
 
@@ -32,8 +39,11 @@ class Player:
 
 
     def check_for_piece_selection(self, position: Position) -> bool:
-        """Returns True if a piece got selected and False otherwise"""
+        """Check if a piece can be selected at position.
 
+        If a selection is possible, set attributes accordingly and return True.
+        Otherwise, clear previous selction if it exists and return False.
+        """
         for piece in self.get_piece_objects():
             if piece.get_position()[0] == position[0] and piece.get_position()[1] == position[1]:
                 if piece is self.selected_piece:
@@ -55,14 +65,13 @@ class Player:
 
 
     def move_selected_piece(self, opponent: Player, position: Position) -> bool:
-        """
-        Moves selected_piece to position if the move is legal.
-        Performs resulting captures.
-        Handles castles.
-        Handles en-passant (both captures and setup).
-        Return True if the piece moved otherwise False.
-        """
+        """Move selected_piece to position if the move is legal.
 
+        Perform resulting captures.
+        Handle castles.
+        Handle en-passant (both captures and setup).
+        Return True if the move happened otherwise False.
+        """
         if opponent.get_color() == self.color:
             raise ValueError("opponent.color cannot be the same as self.color")
 
@@ -118,8 +127,7 @@ class Player:
 
 
     def is_to_promote(self) -> bool:
-        """Returns True if there is a pawn that needs to promote, esle False"""
-
+        """Return True if there is a pawn that needs to promote, esle False."""
         for piece in self.active_piece_list:
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -130,13 +138,15 @@ class Player:
 
 
     def promote(self, promotion_id: int) -> Piece:
-        """
-        Finds which pawn needs to promote and promotes it according to promotion_id (1->Queen, 2->Rook, 3->Knight, 4->Bishop).
-        If there isn't a pawn in need of promotion a RuntimeError is raised.
-        Removes the pawn from the active_piece_list.
-        Returns the created piece after the promotion.
-        """
+        """Perform pawn promotion.
 
+        Find which pawn needs to promote.
+        Promote it according to promotion_id (1->Queen, 2->Rook, 3->Knight, 4->Bishop).
+        If there isn't a pawn in need of promotion a RuntimeError is raised.
+        Remove the pawn from self.active_piece_list.
+        Add the created piece to self.active_piece_list.
+        Return the created piece after the promotion.
+        """
         for idx, piece in enumerate(self.active_piece_list):
             if type(piece).__name__ != 'Pawn':
                 continue
@@ -158,20 +168,26 @@ class Player:
 
 
     def has_selected_piece(self) -> bool:
+        """Return True if there is a selected piece."""
         return bool(self.selected_piece)
 
 
     def remove_selection(self) -> None:
+        """Set self.selected_piece = None."""
         self.selected_piece = None
 
 
     def get_selected_piece(self) -> Piece | None:
+        """Return self.selected_piece."""
         return self.selected_piece
 
 
     def add_piece(self, new_piece: Piece, opponent: Player) -> None:
-        """Adds a new active piece to the player, requires the opponent to perform validity checks."""
+        """Add a new non-King piece to the player's active pieces.
 
+        Use Player.add_king method to add a King.
+        Requires the opponent Player object to perform validity checks.
+        """
         if isinstance(new_piece, King):
             raise ValueError("Use the set_king method to set the king instead")
         if new_piece.get_color() != self.color:
@@ -185,6 +201,10 @@ class Player:
 
 
     def set_king(self, king: King, opponent: Player) -> None:
+        """Add a King to self.active_piece_list.
+
+        Requires opponent Player object to perform validity checks.
+        """
         for piece in self.active_piece_list + opponent.get_piece_objects():
             if king.get_position() == piece.get_position():
                 raise ValueError("There is already a piece in that position")
@@ -203,26 +223,38 @@ class Player:
 
 
     def get_king(self) -> King | None:
+        """Return the player's king."""
         return self.king
 
 
     def get_piece_img_filenames(self) -> list[str]:
+        """Return a list of the image filenames of the active pieces."""
         img_filenames = [piece.get_img_filename() for piece in self.active_piece_list]
         return img_filenames
 
 
     def get_piece_objects(self) -> list[Piece]:
+        """Return a list of the player's active pieces."""
         return self.active_piece_list
 
 
-    def set_en_passant_capturable(self, piece: Pawn | None) -> None:
-        self.en_passant_capturable = piece
+    def set_en_passant_capturable(self, pawn: Pawn | None) -> None:
+        """Set en_passant_capturable to pawn.
+
+        pawn can be of type Pawn or None.
+        """
+        self.en_passant_capturable = pawn
 
 
     def get_en_passant_capturable(self) -> Pawn | None:
+        """Return en_passant_capturable.
+
+        Can return Pawn or None.
+        """
         return self.en_passant_capturable
 
 
     def get_color(self) -> str:
+        """Return self.color attribute."""
         return self.color
 
