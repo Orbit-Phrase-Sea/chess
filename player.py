@@ -3,7 +3,14 @@
 All players are defined here.
 """
 
-from pieces import King, Queen, Rook, Bishop, Knight, Pawn, Piece, Position
+from pieces import King
+from pieces import Queen
+from pieces import Rook
+from pieces import Bishop
+from pieces import Knight
+from pieces import Pawn
+from pieces import Piece
+from pieces import Position
 
 
 class Player:
@@ -23,19 +30,50 @@ class Player:
 
         rank = 0 if color == 'b' else 7
         if piece_setup == 'default' or piece_setup == 'king':
-            self.king = King(color, initial_position=(4, rank), img_filename=color+'K.svg')
+            self.king = King(
+                color,
+                initial_position=(4, rank),
+                img_filename=color+'K.svg',
+            )
             self.active_piece_list.append(self.king)
         if piece_setup == 'default':
             self.active_piece_list += [
-                                        Bishop(self.color, initial_position=(2, rank), img_filename=color+'B.svg'),
-                                        Bishop(self.color, initial_position=(5, rank), img_filename=color+'B.svg'),
-                                        Knight(self.color, initial_position=(1, rank), img_filename=color+'N.svg'),
-                                        Knight(self.color, initial_position=(6, rank), img_filename=color+'N.svg'),
-                                        Rook(color, initial_position=(0, rank), img_filename=color+'R.svg'),
-                                        Rook(color, initial_position=(7, rank), img_filename=color+'R.svg'),
-                                        Queen(color, initial_position=(3, rank), img_filename=color+'Q.svg'),
+                                        Bishop(self.color,
+                                               initial_position=(2, rank),
+                                               img_filename=color+'B.svg',
+                                               ),
+                                        Bishop(self.color,
+                                               initial_position=(5, rank),
+                                               img_filename=color+'B.svg',
+                                               ),
+                                        Knight(self.color,
+                                               initial_position=(1, rank),
+                                               img_filename=color+'N.svg',
+                                               ),
+                                        Knight(self.color,
+                                               initial_position=(6, rank),
+                                               img_filename=color+'N.svg',
+                                               ),
+                                        Rook(color,
+                                             initial_position=(0, rank),
+                                             img_filename=color+'R.svg',
+                                             ),
+                                        Rook(color,
+                                             initial_position=(7, rank),
+                                             img_filename=color+'R.svg',
+                                             ),
+                                        Queen(color,
+                                              initial_position=(3, rank),
+                                              img_filename=color+'Q.svg',
+                                              ),
                                     ]
-            self.active_piece_list += [Pawn(self.color, initial_position=(i, 6 if rank==7 else 1), img_filename=color+'P.svg') for i in range(8)]
+            self.active_piece_list += [
+                Pawn(
+                    self.color,
+                    initial_position=(i, 6 if rank==7 else 1),
+                    img_filename=color+'P.svg',
+                ) for i in range(8)
+            ]
 
 
     def check_for_piece_selection(self, position: Position) -> bool:
@@ -45,7 +83,10 @@ class Player:
         Otherwise, clear previous selction if it exists and return False.
         """
         for piece in self.get_piece_objects():
-            if piece.get_position()[0] == position[0] and piece.get_position()[1] == position[1]:
+            if (
+                piece.get_position()[0] == position[0]
+                and piece.get_position()[1] == position[1]
+            ):
                 if piece is self.selected_piece:
                     self.selected_piece = None
                     piece.set_selected(False)
@@ -78,7 +119,10 @@ class Player:
         if self.selected_piece is None:
             return False
 
-        move_log = str(self.selected_piece.get_position()[0]) + str(self.selected_piece.get_position()[1])
+        move_log = (
+                str(self.selected_piece.get_position()[0])
+                + str(self.selected_piece.get_position()[1])
+        )
 
         moved = not self.selected_piece.move(self, opponent, position)
         self.selected_piece.set_selected(False)
@@ -91,21 +135,25 @@ class Player:
 
         direction = 1 if self.color == 'b' else -1
         for piece_idx, piece in  enumerate(opponent.get_piece_objects()):
-            if (piece.get_position() == self.selected_piece.get_position()):
+            if (
+                piece.get_position() == self.selected_piece.get_position()
+                or ( # Captured en-passant
+                    type(self.selected_piece).__name__
+                    == 'Pawn' == type(piece).__name__ == 'Pawn'
+                    and piece.get_position() == (position[0], position[1]-direction)
+                )
+            ):
                 move_log += 'x'
                 opponent.get_piece_objects().pop(piece_idx)
-
-            # Captured en-passant
-            elif type(self.selected_piece).__name__ == 'Pawn' == type(piece).__name__ == 'Pawn' and piece.get_position() == (position[0], position[1]-direction):
-                move_log += 'x'
-                opponent.get_piece_objects().pop(piece_idx)
-
 
         move_log += str(position[0]) + str(position[1])
 
         # Castles
         k_rook, q_rook = None, None
-        if type(self.selected_piece).__name__ == 'King' and abs(position[0] - int(move_log[0])) == 2:
+        if (
+            type(self.selected_piece).__name__ == 'King'
+            and abs(position[0] - int(move_log[0])) == 2
+        ):
             for piece in self.active_piece_list:
                 if type(piece).__name__ == 'Rook' and not piece.has_moved():
                     if piece.get_position()[0] == 0:
@@ -119,7 +167,10 @@ class Player:
         self.move_history.append(move_log)
 
         # Check whether opponent can capture the moved piece en-passant
-        if type(self.selected_piece).__name__ == 'Pawn' and abs(int(move_log[1])-int(move_log[-1])) == 2:
+        if (
+            type(self.selected_piece).__name__ == 'Pawn'
+            and abs(int(move_log[1])-int(move_log[-1])) == 2
+        ):
             self.en_passant_capturable = self.selected_piece
 
         self.selected_piece = None
@@ -163,7 +214,13 @@ class Player:
         options = [Queen, Rook, Knight, Bishop]
         piece_symbol = 'QRNB'
 
-        self.active_piece_list.append(options[promotion_id-1](self.color, pos, img_filename=self.color+piece_symbol[promotion_id-1]+'.svg'))
+        self.active_piece_list.append(
+            options[promotion_id-1](
+                self.color,
+                pos,
+                img_filename=self.color+piece_symbol[promotion_id-1]+'.svg',
+            )
+        )
         return self.active_piece_list[-1]
 
 
@@ -191,11 +248,15 @@ class Player:
         if isinstance(new_piece, King):
             raise ValueError("Use the set_king method to set the king instead")
         if new_piece.get_color() != self.color:
-            raise ValueError("The color of the piece added must be the same color as the player")
+            raise ValueError(
+                "The color of the piece added must be the same color as the player"
+            )
 
         for piece in self.active_piece_list + opponent.get_piece_objects():
             if piece.get_position() == new_piece.get_position():
-                raise ValueError(f"There is already a piece in position={new_piece.get_position()}")
+                raise ValueError(
+                    f"There is already a piece in position={new_piece.get_position()}"
+                )
 
         self.active_piece_list.append(new_piece)
 
