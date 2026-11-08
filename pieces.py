@@ -1,5 +1,9 @@
-import pygame
+"""Pieces module.
 
+All pieces are defined here.
+"""
+
+import pygame
 
 import player
 
@@ -8,7 +12,7 @@ type Position = tuple[int, int]
 
 
 class Piece:
-
+    """Base class for other pieces to inherit from."""
 
     def __init__(
         self,
@@ -16,6 +20,7 @@ class Piece:
         initial_position: Position,
         img_filename: str='',
     ) -> None:
+        """Initialize a Piece object."""
         if color not in ['w', 'b']:
             raise ValueError('color must be "w" or "b"')
 
@@ -37,6 +42,7 @@ class Piece:
         player_2: player.Player,
         position: Position,
     ) -> int:
+        """Move to position and return 0 if the move was performed, else 1."""
         if (
             not self.is_selected()
             or position not in self.find_legal_moves(player_1, player_2, self.color)
@@ -54,7 +60,7 @@ class Piece:
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
-        """Returns a list containing the positions that are legal to move to."""
+        """Return a list containing the positions that are legal to move to."""
         if color_to_move != 'b' and color_to_move != 'w':
             raise ValueError('color_to_move must be "w" or "b"')
 
@@ -69,7 +75,7 @@ class Piece:
         position: Position,
         color_to_move: str,
     ) -> bool:
-        """Returns True if moving to position puts color_to_move in check, otherwise returns False."""
+        """Return True if moving to position puts ally in check, else return False."""
         if self.color != color_to_move:
             return False
 
@@ -110,7 +116,7 @@ class Piece:
         color_to_move: str,
         moves: list,
     ) -> list[Position]:
-        """Filters a list of moves and returns only the moves that don't put the player with color=color_to_move in check."""
+        """Filter moves and return the ones that don't put ally in check."""
         filtered_moves = []
         for move in moves:
             if self.check_for_checks(ally=ally,
@@ -128,7 +134,7 @@ class Piece:
         player_1: player.Player,
         player_2: player.Player,
         ) -> tuple[player.Player, player.Player]:
-        """Take two players and returns tuple(ally, opponent)"""
+        """Take two players and return tuple(ally, opponent)."""
         if player_1.get_color() == self.color:
             return player_1, player_2
 
@@ -136,43 +142,52 @@ class Piece:
 
 
     def is_selected(self) -> bool:
+        """Return True if the piece is currently selected, else False."""
         return self.selected
 
 
     def has_moved(self) -> bool:
+        """Return True if the piece has moved from its starting position."""
         return self._has_moved
 
 
     def set_img(self, img_object: pygame.surface.Surface) -> None:
+        """Set the image image of the piece."""
         self.img = img_object
 
 
     def get_img_filename(self) -> str:
+        """Return the filename of the piece image to use."""
         return self.img_filename
 
 
     def get_img(self) -> pygame.surface.Surface:
+        """Return the saved piece image object."""
         return self.img
 
 
     def set_position(self, position: Position) -> None:
+        """Set self.position to position."""
         self.position = position
 
 
     def get_position(self) -> Position:
+        """Return current position."""
         return self.position
 
 
     def set_selected(self, selected: bool) -> None:
+        """Return True if the piecce is currently selected, else False."""
         self.selected = selected
 
 
     def get_color(self) -> str:
+        """Return the color of the piece."""
         return self.color
 
 
 class King(Piece):
-
+    """King class that inherits from Piece."""
 
     def find_legal_moves(
         self,
@@ -180,6 +195,7 @@ class King(Piece):
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
+        """Return a list containing the positions that are legal to move to."""
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -220,6 +236,11 @@ class King(Piece):
         opponent: player.Player,
         side: str,
     ) -> bool:
+        """Return True if castles towards side is legal, else False.
+
+        side can be 'k' for a kingside castles legality check
+        or 'q' for a queenside check
+        """
         if side not in ['k', 'q']:
             raise ValueError("side must be 'k' or 'q'")
 
@@ -261,7 +282,7 @@ class King(Piece):
 
 
 class Bishop(Piece):
-
+    """Bishop class that inherits from Piece."""
 
     def find_legal_moves(
         self,
@@ -269,6 +290,7 @@ class Bishop(Piece):
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
+        """Return a list containing the positions that are legal to move to."""
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -306,7 +328,7 @@ class Bishop(Piece):
 
 
 class Rook(Piece):
-
+    """Rook class that inherits from Piece."""
 
     def find_legal_moves(
         self,
@@ -314,6 +336,7 @@ class Rook(Piece):
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
+        """Return a list containing the positions that are legal to move to."""
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -391,7 +414,7 @@ class Rook(Piece):
 
 
 class Knight(Piece):
-
+    """Knight class that inherits from Piece."""
 
     def find_legal_moves(
         self,
@@ -399,6 +422,7 @@ class Knight(Piece):
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
+        """Return a list containing the positions that are legal to move to."""
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
         ally_piece_pos = [piece.get_position() for piece in ally.get_piece_objects()]
@@ -417,7 +441,7 @@ class Knight(Piece):
 
 
 class Pawn(Piece):
-
+    """Pawn class that inherits from Piece."""
 
     def find_legal_moves(
         self,
@@ -425,6 +449,7 @@ class Pawn(Piece):
         player_2: player.Player,
         color_to_move: str,
     ) -> list[Position]:
+        """Return a list containing the positions that are legal to move to."""
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
@@ -477,7 +502,7 @@ class Pawn(Piece):
 
 
 class Queen(Rook, Bishop):
-
+    """Queen class that inherits from Rook and Bishop."""
 
     pass
 
