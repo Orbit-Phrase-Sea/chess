@@ -3,7 +3,7 @@
 All pieces are defined here.
 """
 
-import pygame
+from pygame.surface import Surface
 
 import player
 
@@ -151,7 +151,7 @@ class Piece:
         return self._has_moved
 
 
-    def set_img(self, img_object: pygame.surface.Surface) -> None:
+    def set_img(self, img_object: Surface) -> None:
         """Set the image image of the piece."""
         self.img = img_object
 
@@ -161,7 +161,7 @@ class Piece:
         return self.img_filename
 
 
-    def get_img(self) -> pygame.surface.Surface:
+    def get_img(self) -> Surface:
         """Return the saved piece image object."""
         return self.img
 
