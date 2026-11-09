@@ -15,10 +15,8 @@ pygame.display.set_caption('Chess')
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((Display.WIDTH, Display.HEIGHT))
 
-board = pygame.image.load(os.path.join('assets', 'boards', 'maple.jpg'))
-check_indicator = pygame.image.load(
-    os.path.join('assets', 'check_indicators', 'red_blur.png')
-)
+board = pygame.image.load(Display.BOARD_IMAGE_PATH)
+check_indicator = pygame.image.load(Display.CHECK_INDICATOR_IMAGE_PATH)
 
 players = {
         'w' : Player('w'),
@@ -34,7 +32,7 @@ for player in players.values():
     ):
         piece.set_img(
             pygame.image.load(
-                os.path.join('assets', 'piece_sets', 'cburnett', filename)
+                os.path.join(Display.PIECE_THEME_ROOT_PATH, filename)
             )
         )
 
@@ -82,10 +80,8 @@ while running:
             new_piece.set_img(
                 pygame.image.load(
                     os.path.join(
-                        'assets',
-                        'piece_sets',
-                        'cburnett',
-                        new_piece.get_img_filename()
+                        Display.PIECE_THEME_ROOT_PATH,
+                        new_piece.get_img_filename(),
                     )
                 )
             )
