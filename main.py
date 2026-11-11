@@ -7,6 +7,7 @@ import pygame
 
 from constants import Display
 from player import Player
+from render_text import render_text
 
 
 pygame.init()
@@ -47,7 +48,7 @@ for player in players.values():
 # Game loop
 color_to_move: str = 'w'
 opponent_color: str = 'b'
-outcome: str = ''
+outcome_text: str = ''
 game_over: bool = False
 display_change: bool = True
 promotion_in_progress: bool = False
@@ -140,10 +141,9 @@ while running:
     else:
         game_over = True
         if in_check:
-            outcome = f"Checkmate, {'white' if opponent_color=='w' else 'black'} wins!"
+            outcome_text = f"{'white' if opponent_color=='w' else 'black'} won!"
         else:
-            outcome = 'Stalemate, Draw'
-        print(outcome)
+            outcome_text = 'stalemate'
 
     # No events
     if not display_change:
@@ -152,7 +152,7 @@ while running:
     # Draw
     pygame.display.set_caption(
         f'Chess | {"white" if color_to_move=="w" else "black"} to play '
-        + f'| move: {move_count//2+1} | {outcome}'
+        + f'| move: {move_count//2+1} | {outcome_text}'
     )
     screen.blit(board, (0, 0))
 
@@ -181,6 +181,16 @@ while running:
                 ((.5+move[0])*Display.WIDTH/8, (.5+move[1])*Display.HEIGHT/8),
                 10,
             )
+
+    if game_over:
+        outcome_text_surface = render_text(outcome_text)
+        screen.blit(
+            outcome_text_surface,
+            (
+                (Display.WIDTH-outcome_text_surface.get_width()) / 2,
+                (Display.HEIGHT-outcome_text_surface.get_height()) / 2,
+            ),
+        )
 
     display_change = False
     pygame.display.flip()
