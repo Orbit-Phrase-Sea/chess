@@ -12,11 +12,11 @@ def test_king_init(players_setup, color):
     players, _ = players_setup('king')
     rank = 0 if color == 'b' else 7
 
-    piece_type = type(players[color].get_king()).__name__
+    piece_type = type(players[color].get_king())
     selection_state =  players[color].get_king().is_selected()
     position = players[color].get_king().get_position()
 
-    assert piece_type == 'King'
+    assert piece_type is King
     assert selection_state == False
     assert position == (4, rank)
 

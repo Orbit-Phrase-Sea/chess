@@ -4,7 +4,7 @@ from collections import Counter
 import pytest
 
 
-from pieces import King, Knight, Pawn
+from pieces import King, Knight, Pawn, Queen, Bishop, Rook
 
 
 @pytest.mark.parametrize('pawn_x', range(8))
@@ -70,11 +70,11 @@ def test_pawn_promotion(players_setup, color_to_move, pawn_x, promote_id):
     promotion_detected = players[color_to_move].is_to_promote()
     new_piece = players[color_to_move].promote(promote_id)
 
-    expected_piece = ['Queen', 'Rook', 'Knight', 'Bishop']
+    expected_piece = [Queen, Rook, Knight, Bishop]
     expected_position = (pawn_x, rank)
 
     assert promotion_detected
-    assert expected_piece[promote_id-1] == type(new_piece).__name__
+    assert expected_piece[promote_id-1] is type(new_piece)
     assert expected_position == new_piece.get_position()
 
 

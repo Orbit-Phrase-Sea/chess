@@ -138,8 +138,8 @@ class Player:
             if (
                 piece.get_position() == self.selected_piece.get_position()
                 or ( # Captured en-passant
-                    type(self.selected_piece).__name__
-                    == 'Pawn' == type(piece).__name__ == 'Pawn'
+                    type(self.selected_piece) is Pawn
+                    and type(piece) is Pawn
                     and piece.get_position() == (position[0], position[1]-direction)
                 )
             ):
@@ -151,11 +151,11 @@ class Player:
         # Castles
         k_rook, q_rook = None, None
         if (
-            type(self.selected_piece).__name__ == 'King'
+            type(self.selected_piece) is King
             and abs(position[0] - int(move_log[0])) == 2
         ):
             for piece in self.active_piece_list:
-                if type(piece).__name__ == 'Rook' and not piece.has_moved():
+                if type(piece) is Rook and not piece.has_moved():
                     if piece.get_position()[0] == 0:
                         q_rook = piece
                     elif piece.get_position()[0] == 7:
@@ -168,7 +168,7 @@ class Player:
 
         # Check whether opponent can capture the moved piece en-passant
         if (
-            type(self.selected_piece).__name__ == 'Pawn'
+            type(self.selected_piece) is Pawn
             and abs(int(move_log[1])-int(move_log[-1])) == 2
         ):
             self.en_passant_capturable = self.selected_piece
@@ -180,7 +180,7 @@ class Player:
     def is_to_promote(self) -> bool:
         """Return True if there is a pawn that needs to promote, esle False."""
         for piece in self.active_piece_list:
-            if type(piece).__name__ != 'Pawn':
+            if type(piece) is not Pawn:
                 continue
             if piece.get_position()[1] == (7 if self.color == 'b' else 0):
                 return True
@@ -199,7 +199,7 @@ class Player:
         Return the created piece after the promotion.
         """
         for idx, piece in enumerate(self.active_piece_list):
-            if type(piece).__name__ != 'Pawn':
+            if type(piece) is not Pawn:
                 continue
             if piece.get_position()[1] == (7 if self.color == 'b' else 0):
                 piece_idx = idx

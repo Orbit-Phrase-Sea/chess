@@ -263,7 +263,7 @@ class King(Piece):
                 return False
             if (
                 piece.get_color() == self.color
-                and type(piece).__name__ == 'Rook'
+                and type(piece) is Rook
                 and piece.get_position() == (rook_x, rank)
             ):
                 if not piece.has_moved():
