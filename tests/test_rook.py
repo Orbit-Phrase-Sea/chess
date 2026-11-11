@@ -1,8 +1,6 @@
 from collections import Counter
 
-
 import pytest
-
 
 from pieces import Rook, Knight
 
@@ -10,7 +8,9 @@ from pieces import Rook, Knight
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_rook_moves(players_setup, color_to_move):
     players, opponent_color = players_setup('king', color_to_move)
-    players[color_to_move].add_piece(Rook(color_to_move, (3, 3)), players[opponent_color])
+    players[color_to_move].add_piece(
+        Rook(color_to_move, (3, 3)), players[opponent_color]
+    )
 
     expected_moves = []
     for i in range(8):
@@ -18,7 +18,11 @@ def test_rook_moves(players_setup, color_to_move):
             continue
         expected_moves += [(i, 3), (3, i)]
 
-    moves = players[color_to_move].get_piece_objects()[-1].find_legal_moves(players['w'], players['b'], color_to_move)
+    moves = players[color_to_move].get_piece_objects()[-1].find_legal_moves(
+        players['w'],
+        players['b'],
+        color_to_move,
+    )
 
     assert Counter(moves) == Counter(expected_moves)
 
@@ -28,8 +32,14 @@ def test_rook_moves(players_setup, color_to_move):
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_rook_with_piece(players_setup, color_to_move, blocking_piece_color):
     players, opponent_color = players_setup('king', color_to_move)
-    players[color_to_move].add_piece(Rook(color_to_move, (3, 3)), players[opponent_color])
-    players[blocking_piece_color].add_piece(Knight(blocking_piece_color, (3, 1)), players[opponent_color])
+    players[color_to_move].add_piece(
+        Rook(color_to_move, (3, 3)),
+        players[opponent_color],
+    )
+    players[blocking_piece_color].add_piece(
+        Knight(blocking_piece_color, (3, 1)),
+        players[opponent_color],
+    )
 
     expected_moves = []
     for i in range(8):
@@ -43,7 +53,11 @@ def test_rook_with_piece(players_setup, color_to_move, blocking_piece_color):
     if blocking_piece_color != color_to_move:
         expected_moves.append((3, 1))
 
-    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(players['w'], players['b'], color_to_move)
+    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(
+        players['w'],
+        players['b'],
+        color_to_move
+    )
 
     assert Counter(moves) == Counter(expected_moves)
 

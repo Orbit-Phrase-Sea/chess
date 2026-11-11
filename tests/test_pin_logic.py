@@ -1,8 +1,6 @@
 from collections import Counter
 
-
 import pytest
-
 
 from pieces import Bishop, Knight, Pawn, Queen, Rook
 
@@ -14,7 +12,10 @@ def test_pin_1(players_setup, color_to_move):
     rank = 1 if color_to_move == 'b' else 6
     pawn = Pawn(color_to_move, (5, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
-    players[opponent_color].add_piece(Bishop(opponent_color, (7, 4 if color_to_move=='w' else 3)), players[opponent_color])
+    players[opponent_color].add_piece(
+        Bishop(opponent_color, (7, 4 if color_to_move=='w' else 3)),
+        players[opponent_color],
+    )
 
     moves = pawn.find_legal_moves(players['b'], players['w'], color_to_move)
 
@@ -46,8 +47,12 @@ def test_pin_3(players_setup, color_to_move):
     players[color_to_move].add_piece(knight_1, players[opponent_color])
     players[color_to_move].add_piece(knight_2, players[opponent_color])
 
-    knight_1_has_moves = bool(knight_1.find_legal_moves(players['b'], players['w'], color_to_move))
-    knight_2_has_moves = bool(knight_2.find_legal_moves(players['b'], players['w'], color_to_move))
+    knight_1_has_moves = bool(
+        knight_1.find_legal_moves(players['b'], players['w'], color_to_move)
+    )
+    knight_2_has_moves = bool(
+        knight_2.find_legal_moves(players['b'], players['w'], color_to_move)
+    )
 
     assert knight_1_has_moves
     assert knight_2_has_moves
@@ -61,10 +66,16 @@ def test_pin_negative(players_setup, color_to_move):
 
     pawn = Pawn(color_to_move, (5, rank))
     players[color_to_move].add_piece(pawn, players[opponent_color])
-    players[opponent_color].add_piece(Bishop(opponent_color, (7, 4 if color_to_move=='w' else 3)), players[opponent_color])
+    players[opponent_color].add_piece(
+        Bishop(opponent_color, (7, 4 if color_to_move=='w' else 3)),
+        players[opponent_color],
+    )
 
     players[color_to_move].check_for_piece_selection(pawn.get_position())
-    moved = players[color_to_move].move_selected_piece(players[opponent_color], (5, rank+direction))
+    moved = players[color_to_move].move_selected_piece(
+        players[opponent_color],
+        (5, rank+direction),
+    )
 
     assert not moved
     assert pawn.get_position() == (5, rank)

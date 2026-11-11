@@ -1,8 +1,6 @@
 from collections import Counter
 
-
 import pytest
-
 
 from pieces import Bishop, Pawn
 
@@ -10,10 +8,16 @@ from pieces import Bishop, Pawn
 @pytest.mark.parametrize('color_to_move', ['w', 'b'])
 def test_bishop_edge_moves(players_setup, color_to_move):
     players, opponent_color = players_setup('king', color_to_move)
-    players[color_to_move].add_piece(Bishop(color_to_move, (7, 0)), players[opponent_color])
+    players[color_to_move].add_piece(
+        Bishop(color_to_move, (7, 0)), players[opponent_color]
+    )
 
     expected_moves = [(7-i, i) for i in range(1, 8)]
-    moves = players[color_to_move].get_piece_objects()[-1].find_legal_moves(players['w'], players['b'], color_to_move)
+    moves = players[color_to_move].get_piece_objects()[-1].find_legal_moves(
+        players['w'],
+        players['b'],
+        color_to_move,
+    )
 
     assert Counter(moves) == Counter(expected_moves)
 
@@ -23,8 +27,12 @@ def test_bishop_edge_moves(players_setup, color_to_move):
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_bishop_with_piece(players_setup, color_to_move, blocking_piece_color):
     players, opponent_color = players_setup('king', color_to_move)
-    players[color_to_move].add_piece(Bishop(color_to_move, (6, 4)), players[opponent_color])
-    players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (5, 5)), players[opponent_color])
+    players[color_to_move].add_piece(
+        Bishop(color_to_move, (6, 4)), players[opponent_color]
+    )
+    players[blocking_piece_color].add_piece(
+        Pawn(blocking_piece_color, (5, 5)), players[opponent_color]
+    )
 
     expected_moves = [(7, 3)]
     for i in range(6):
@@ -35,7 +43,11 @@ def test_bishop_with_piece(players_setup, color_to_move, blocking_piece_color):
     if blocking_piece_color != color_to_move:
         expected_moves.append((5, 5))
 
-    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(players['w'], players['b'], color_to_move)
+    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(
+        players['w'],
+        players['b'],
+        color_to_move,
+    )
 
     assert Counter(moves) == Counter(expected_moves)
 
@@ -44,12 +56,20 @@ def test_bishop_with_piece(players_setup, color_to_move, blocking_piece_color):
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_bishop_with_piece_2(players_setup, color_to_move, blocking_piece_color):
     players, opponent_color = players_setup('king', color_to_move)
-    players[color_to_move].add_piece(Bishop(color_to_move, (0, 0)), players[opponent_color])
-    players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])
+    players[color_to_move].add_piece(
+        Bishop(color_to_move, (0, 0)), players[opponent_color]
+    )
+    players[blocking_piece_color].add_piece(
+        Pawn(blocking_piece_color, (1, 1)), players[opponent_color]
+    )
 
     expected_moves = [] if color_to_move == blocking_piece_color else [(1, 1)]
 
-    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(players['w'], players['b'], color_to_move)
+    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(
+        players['w'],
+        players['b'],
+        color_to_move,
+    )
 
     assert moves == expected_moves
 
@@ -60,7 +80,9 @@ def test_bishop_with_piece_negative(players_setup, color_to_move, blocking_piece
     players, opponent_color = players_setup('king', color_to_move)
     bishop = Bishop(color_to_move, (0, 0))
     players[color_to_move].add_piece(bishop, players[opponent_color])
-    players[blocking_piece_color].add_piece(Pawn(blocking_piece_color, (1, 1)), players[opponent_color])
+    players[blocking_piece_color].add_piece(
+        Pawn(blocking_piece_color, (1, 1)), players[opponent_color]
+    )
 
     players[color_to_move].check_for_piece_selection((0, 0))
     moved = players[color_to_move].move_selected_piece(players[opponent_color], (2, 2))

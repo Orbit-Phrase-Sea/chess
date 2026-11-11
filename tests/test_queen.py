@@ -1,8 +1,6 @@
 from collections import Counter
 
-
 import pytest
-
 
 from pieces import Queen
 
