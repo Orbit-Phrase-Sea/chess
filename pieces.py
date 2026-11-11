@@ -24,7 +24,12 @@ class Piece:
         if color not in ['w', 'b']:
             raise ValueError('color must be "w" or "b"')
 
-        if 0 < initial_position[0] >= 8 or 0 < initial_position[1] >= 8:
+        if (
+            initial_position[0] > 7
+            or initial_position[0] < 0
+            or initial_position[1] > 7
+            or initial_position[1] < 0
+        ):
             raise ValueError(
                 'The elements of initial_position must be in [0, 7] exclusively'
             )
