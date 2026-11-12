@@ -172,3 +172,63 @@ def test_captures_en_passant_not_next_move(players_setup, color_to_move, pawn_x)
 
     assert moves == expected_moves
 
+
+@pytest.mark.parametrize('enemy_pawn_x', range(1, 6))
+@pytest.mark.parametrize('ally_color', ['w', 'b'])
+def test_en_passant_creates_discovery(players_setup, ally_color, enemy_pawn_x):
+    players, opponent_color = players_setup('king', ally_color)
+
+    # ally_color will be attempting the illegal capture
+    rank_of_interest = 3 if ally_color == 'w' else 4
+
+    players[opponent_color].add_piece(
+        Rook(opponent_color, (7, rank_of_interest)),
+        players[ally_color],
+    )
+
+    enemy_pawn = Pawn(
+        opponent_color,
+        (enemy_pawn_x, 1 if ally_color == 'w' else 6),
+    )
+    bad_move = ( # This move should not be allowed
+        enemy_pawn_x,
+        2 if ally_color == 'w' else 5,
+    )
+    players[opponent_color].add_piece(
+        enemy_pawn,
+        players[ally_color],
+    )
+
+    ally_pawn = Pawn(ally_color, (enemy_pawn_x+1, rank_of_interest))
+    players[ally_color].add_piece(
+        ally_pawn,
+        players[opponent_color],
+    )
+    players[ally_color].get_king().set_position((0, rank_of_interest))
+
+    players[opponent_color].check_for_piece_selection(enemy_pawn.get_position())
+    players[opponent_color].move_selected_piece(
+        players[ally_color],
+        (enemy_pawn_x, rank_of_interest),
+    )
+
+    en_passant_is_allowed = (
+            bad_move
+            in ally_pawn.find_legal_moves(
+                players[ally_color],
+                players[opponent_color],
+                ally_color,
+            )
+    )
+
+    players[ally_color].check_for_piece_selection(ally_pawn.get_position())
+    moved = players[ally_color].move_selected_piece(
+        players[opponent_color],
+        bad_move,
+    )
+
+    assert not en_passant_is_allowed
+    assert ally_pawn.get_position() == (enemy_pawn_x+1, rank_of_interest)
+    assert enemy_pawn in players[opponent_color].get_piece_objects()
+    assert not moved
+
