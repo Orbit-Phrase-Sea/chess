@@ -467,13 +467,31 @@ class Pawn(Piece):
 
         en_passant_capturable = opponent.get_en_passant_capturable()
         if (
-            en_passant_capturable is not None
+            color_to_move == self.get_color() # do not perform en-passant check it's not our turn.
+            and en_passant_capturable is not None
             and en_passant_capturable.get_position()[1] == self.position[1]
             and abs(en_passant_capturable.get_position()[0]-self.position[0]) == 1
         ):
-            legal_moves.append(
-                (en_passant_capturable.get_position()[0], self.position[1]+direction)
-            )
+            for idx, piece in enumerate(opponent.get_piece_objects()): # Simulate capture en-passant.
+                if piece is en_passant_capturable:
+                    opponent.get_piece_objects().pop(idx)
+                    break
+            if not self.check_for_checks( # Check if capturing puts ally in check.
+                ally=ally,
+                opponent=opponent,
+                position=(
+                    en_passant_capturable.get_position()[0],
+                    self.position[1]+direction,
+                ),
+                color_to_move=color_to_move,
+            ):
+                legal_moves.append( # En-passant is possible, add the move.
+                    (
+                        en_passant_capturable.get_position()[0],
+                        self.position[1]+direction,
+                    )
+                )
+            opponent.active_piece_list.append(en_passant_capturable) # Reset simulated capture.
 
         # Check forward moves
         possible_moves = [
