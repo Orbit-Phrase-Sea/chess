@@ -68,7 +68,7 @@ chess/
 
 ## Requirements
 
-- **Python**: 3.10+ (uses Python 3.10+ type hints: `type Position = tuple[int, int]`)
+- **Python**: 3.12+ (uses Python 3.12+ type hints: `type Position = tuple[int, int]`)
 - **Pygame-ce**: 2.0+
 - **Pytest**: 7.0+ (for running tests)
 
@@ -130,7 +130,7 @@ python -m pytest
   - `pieces.py` handles piece logic
   - `player.py` manages player state
   - `main.py` orchestrates the game loop and UI
-- **Type Safety**: Uses Python 3.10+ type hints for clarity and IDE support
+- **Type Safety**: Uses Python 3.12+ type hints for clarity and IDE support
 
 ### Game State Management
 
