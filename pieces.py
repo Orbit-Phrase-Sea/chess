@@ -345,62 +345,47 @@ class Rook(Piece):
         legal_moves = super().find_legal_moves(player_1, player_2, color_to_move)
         ally, opponent = self.ally_opponent(player_1, player_2)
 
-        x_ally_intersects, y_ally_intersects  = [], []
-        for piece in ally.get_piece_objects():
-            if piece is self:
-                continue
-
-            pos = piece.get_position()
-            if pos[0] == self.position[0]:
-                y_ally_intersects.append(pos[1])
-            elif pos[1] == self.position[1]:
-                x_ally_intersects.append(pos[0])
-
-
-        x_opponent_intersects, y_opponent_intersects = [], []
-        for piece in opponent.get_piece_objects():
-            pos = piece.get_position()
-            if pos[0] == self.position[0]:
-                y_opponent_intersects.append(pos[1])
-            elif pos[1] == self.position[1]:
-                x_opponent_intersects.append(pos[0])
-
-        x_ally_intersects = sorted(x_ally_intersects)
-        y_ally_intersects  = sorted(y_ally_intersects)
-        x_opponent_intersects = sorted(x_opponent_intersects)
-        y_opponent_intersects = sorted(y_opponent_intersects)
         min_x, max_x = 0, 7
         min_y, max_y = 0, 7
-        for i in x_ally_intersects:
-            if i < self.position[0]:
-                min_x = i + 1
-                continue
-            max_x = i - 1
-            break
 
-        for i in y_ally_intersects:
-            if i < self.position[1]:
-                min_y = i + 1
-                continue
-            max_y = i - 1
-            break
+        ally_piece_pos = [
+            piece.get_position() for piece in ally.get_piece_objects()
+        ]
+        opponent_piece_pos = [
+            piece.get_position() for piece in opponent.get_piece_objects()
+        ]
 
-        for i in y_opponent_intersects:
-            if i < min_y or i > max_y:
+        for i in range(8):
+            if i == self.position[0]:
                 continue
-            if i < self.position[1]:
-                min_y = i
-                continue
-            max_y = i
+            if (i, self.position[1]) in ally_piece_pos:
+                if i < self.position[0]:
+                    min_x = i + 1
+                else:
+                    max_x = i - 1
+                    break
+            elif (i, self.position[1]) in opponent_piece_pos:
+                if i < self.position[0]:
+                    min_x = i
+                else:
+                    max_x = i
+                    break
 
-        for i in x_opponent_intersects:
-            if i < min_x or i > max_x:
+        for i in range(8):
+            if i == self.position[1]:
                 continue
-            if i < self.position[0]:
-                min_x = i
-                continue
-            max_x = i
-
+            if (self.position[0], i) in ally_piece_pos:
+                if i < self.position[1]:
+                    min_y = i + 1
+                else:
+                    max_y = i - 1
+                    break
+            elif (self.position[0], i) in opponent_piece_pos:
+                if i < self.position[1]:
+                    min_y = i
+                else:
+                    max_y = i
+                    break
 
         for i in range(min_x, max_x+1):
             if i == self.position[0]:
