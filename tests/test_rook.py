@@ -32,8 +32,9 @@ def test_rook_moves(players_setup, color_to_move):
 @pytest.mark.parametrize('blocking_piece_color', ['w', 'b'])
 def test_rook_with_piece(players_setup, color_to_move, blocking_piece_color):
     players, opponent_color = players_setup('king', color_to_move)
+    rook = Rook(color_to_move, (3, 3))
     players[color_to_move].add_piece(
-        Rook(color_to_move, (3, 3)),
+        rook,
         players[opponent_color],
     )
     players[blocking_piece_color].add_piece(
@@ -53,7 +54,7 @@ def test_rook_with_piece(players_setup, color_to_move, blocking_piece_color):
     if blocking_piece_color != color_to_move:
         expected_moves.append((3, 1))
 
-    moves = players[color_to_move].get_piece_objects()[1].find_legal_moves(
+    moves = rook.find_legal_moves(
         players['w'],
         players['b'],
         color_to_move
