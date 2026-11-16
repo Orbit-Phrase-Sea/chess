@@ -70,7 +70,7 @@ while running:
             if event.type != pygame.KEYDOWN:
                 continue
 
-            # 1 = queen, 2 = rook, 3 = knite, 4 = bishop
+            # 1 = queen, 2 = rook, 3 = knight, 4 = bishop
             promotion_options = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]
             if event.key not in promotion_options:
                 continue
