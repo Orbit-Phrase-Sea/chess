@@ -16,6 +16,17 @@ from pieces import Position
 class Player:
     """Fully functional Player class."""
 
+    piece_symbol: dict[type[Piece], str] = {
+        King : 'K',
+        Queen : 'Q',
+        Bishop : 'B',
+        Rook : 'R',
+        Knight : 'N',
+        Pawn : '',
+    }
+    move_history_algebraic: list[str] = []
+
+
     def __init__(self, color: str, piece_setup: str='default') -> None:
         """Initialize Player."""
         if piece_setup not in ['default', 'king', 'empty']:
@@ -123,6 +134,21 @@ class Player:
                 str(self.selected_piece.get_position()[0])
                 + str(self.selected_piece.get_position()[1])
         )
+        move_log_algebraic = self.piece_symbol[type(self.selected_piece)]
+        if move_log_algebraic != 'K':
+            move_log_algebraic += (
+                    chr(97+self.selected_piece.get_position()[0])
+                    + str(8-self.selected_piece.get_position()[1])
+            )
+
+
+        if move_log_algebraic[0] in 'QRBN':
+            move_log_algebraic = self.algebraic_verbosity_cleanup(
+                move_log_algebraic,
+                self.selected_piece,
+                position,
+                opponent,
+            )
 
         moved = not self.selected_piece.move(self, opponent, position)
         self.selected_piece.set_selected(False)
@@ -144,9 +170,14 @@ class Player:
                 )
             ):
                 move_log += 'x'
+                move_log_algebraic += 'x'
                 opponent.get_piece_objects().pop(piece_idx)
 
         move_log += str(position[0]) + str(position[1])
+        move_log_algebraic += (
+                chr(97+position[0])
+                + str(8-position[1])
+        )
 
         # Castles
         k_rook, q_rook = None, None
@@ -162,9 +193,29 @@ class Player:
                         k_rook = piece
         if self.selected_piece is self.king and position[0] - int(move_log[0]) == 2:
             k_rook.set_position((5, k_rook.get_position()[1]))
+            move_log_algebraic = 'O-O'
         if self.selected_piece is self.king and int(move_log[0]) - position[0] == 2:
             q_rook.set_position((3, q_rook.get_position()[1]))
+            move_log_algebraic = 'O-O-O'
+
         self.move_history.append(move_log)
+
+        if move_log_algebraic[0] not in 'KQRBNO' and 'x' not in move_log_algebraic:
+            # Shorten pawn notation (no captures)
+            move_log_algebraic = move_log_algebraic[2:]
+        elif move_log_algebraic[2] == 'x':
+            # Shorten pawn notation (captures)
+            move_log_algebraic = move_log_algebraic[0] + move_log_algebraic[2:]
+
+        # Add check in algebraic notation.
+        if opponent.get_king().check_for_checks(
+            ally=opponent,
+            opponent=self,
+            position=opponent.get_king().get_position(),
+            color_to_move=opponent.get_color(),
+        ):
+            move_log_algebraic += '+'
+        self.move_history_algebraic.append(move_log_algebraic)
 
         # Check whether opponent can capture the moved piece en-passant
         if (
@@ -222,6 +273,54 @@ class Player:
             )
         )
         return self.active_piece_list[-1]
+
+
+    def algebraic_verbosity_cleanup(
+            self,
+            verbose_notation: str,
+            piece_to_move: Queen | Rook | Bishop | Knight,
+            move: Position,
+            opponent: Player,
+    ) -> str:
+        """Return the minimal differantiating notation for the piece that is to move.
+
+        Has to run before the move is made.
+        """
+        if opponent.get_color() == self.color:
+            raise ValueError('opponent.color cannot be the same as self.color')
+
+        pieces_to_check = []
+        for piece in self.active_piece_list:
+            if (
+                piece is piece_to_move
+                or type(piece) is not type(piece_to_move)
+            ):
+                continue
+            if move in piece.find_legal_moves(self, opponent, self.color):
+                pieces_to_check.append(piece)
+
+        x_diff_count = 0
+        y_diff_count = 0
+        for piece in pieces_to_check:
+            if (
+                piece.get_position()[0] != piece_to_move.get_position()[0]
+            ):
+                x_diff_count += 1
+            if (
+                piece.get_position()[1] != piece_to_move.get_position()[1]
+            ):
+                y_diff_count += 1
+
+        if not pieces_to_check:                    # everything is unique
+            differentiating_factor = ''
+        elif x_diff_count == len(pieces_to_check): # x coordinate (file) is unique
+            differentiating_factor = verbose_notation[1]
+        elif y_diff_count == len(pieces_to_check): # y coordinate (rank) is unique
+            differentiating_factor = verbose_notation[2]
+        else:                                      # nothing is unique
+            differentiating_factor = verbose_notation[1] + verbose_notation[2]
+
+        return verbose_notation[0] + differentiating_factor + verbose_notation[3:]
 
 
     def has_selected_piece(self) -> bool:
