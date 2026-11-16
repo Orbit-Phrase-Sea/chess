@@ -157,7 +157,7 @@ class Piece:
 
 
     def set_img(self, img_object: Surface) -> None:
-        """Set the image image of the piece."""
+        """Set the image of the piece."""
         self.img = img_object
 
 
@@ -182,7 +182,7 @@ class Piece:
 
 
     def set_selected(self, selected: bool) -> None:
-        """Return True if the piecce is currently selected, else False."""
+        """Set the selected state of the piece."""
         self.selected = selected
 
 
