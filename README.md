@@ -54,6 +54,7 @@ chess/
 ├── main.py                 # Game loop and Pygame interface
 ├── pieces.py               # Chess piece classes and movement logic
 ├── player.py               # Player state management and piece collection
+├── render_text.py          # Text rendering function for game result
 ├── constants.py            # Display configuration constants
 ├── pytest.ini              # Pytest configuration
 ├── .gitignore              # Git ignore rules
