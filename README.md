@@ -114,11 +114,11 @@ python -m pytest
 
 ### Game Flow
 
-1. **Piece Selection**: Click a piece to select it; green dots appear showing legal moves
+1. **Piece Selection**: Click a piece to select it; green circles appear showing legal moves
 2. **Movement**: Click a legal square to move the piece
-3. **Special Moves**: 
-   - Castling and en passant occur automatically when valid
-   - Pawn promotion is prompted with keyboard input
+3. **Special Moves**: Castling and en passant are performed as normal moves
+   - Click the king and then the castling square. The rook moves automatically during castling.
+   - Click a pawn's diagonal square to capture en passant. When a pawn reaches the back rank, a promotion prompt appears and you press 1–4 to choose the piece.
 4. **Game End**: The game detects checkmate or stalemate automatically and displays the result
 
 ## Architecture
