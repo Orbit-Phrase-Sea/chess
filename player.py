@@ -16,6 +16,7 @@ from pieces import Position
 class Player:
     """Fully functional Player class."""
 
+    # Piece symbols for algebraic notation
     piece_symbol: dict[type[Piece], str] = {
         King : 'K',
         Queen : 'Q',
@@ -24,6 +25,8 @@ class Player:
         Knight : 'N',
         Pawn : '',
     }
+
+    # Shared by both players so the full game record is kept in one place
     move_history_algebraic: list[str] = []
 
 
