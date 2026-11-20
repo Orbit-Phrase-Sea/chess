@@ -30,7 +30,7 @@ class Player:
     def __init__(self, color: str, piece_setup: str='default') -> None:
         """Initialize Player."""
         if piece_setup not in ['default', 'king', 'empty']:
-            raise ValueError('piece_setup must be one of: "default", "empty"')
+            raise ValueError('piece_setup must be one of: "default", "king", "empty"')
 
         self.color: str = color
         self.selected_piece: Piece | None = None
