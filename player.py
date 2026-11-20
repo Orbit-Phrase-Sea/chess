@@ -164,7 +164,7 @@ class Player:
 
         direction = 1 if self.color == 'b' else -1
         for piece_idx, piece in  enumerate(opponent.get_piece_objects()):
-            if (
+            if ( # Captured a piece
                 piece.get_position() == self.selected_piece.get_position()
                 or ( # Captured en-passant
                     type(self.selected_piece) is Pawn
@@ -175,6 +175,7 @@ class Player:
                 move_log += 'x'
                 move_log_algebraic += 'x'
                 opponent.get_piece_objects().pop(piece_idx)
+                break
 
         move_log += str(position[0]) + str(position[1])
         move_log_algebraic += (
