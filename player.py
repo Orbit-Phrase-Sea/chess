@@ -91,7 +91,7 @@ class Player:
         """Check if a piece can be selected at position.
 
         If a selection is possible, set attributes accordingly and return True.
-        Otherwise, clear previous selction if it exists and return False.
+        Otherwise, clear previous selection if it exists and return False.
         """
         for piece in self.get_piece_objects():
             if (
@@ -229,7 +229,7 @@ class Player:
 
 
     def is_to_promote(self) -> bool:
-        """Return True if there is a pawn that needs to promote, esle False."""
+        """Return True if there is a pawn that needs to promote, else False."""
         for piece in self.active_piece_list:
             if type(piece) is not Pawn:
                 continue
@@ -282,7 +282,7 @@ class Player:
             move: Position,
             opponent: Player,
     ) -> str:
-        """Return the minimal differantiating notation for the piece that is to move.
+        """Return the minimal differentiating notation for the piece that is to move.
 
         Has to run before the move is made.
         """
